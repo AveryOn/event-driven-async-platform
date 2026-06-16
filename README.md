@@ -1,3 +1,3 @@
-# Engineering Lab Template
+# Event Driven Async Platform
 
-#### Template repository for engineering laboratories. Provides a structured workflow for managing tasks, experiments, research, implementations, roadmaps, and qualification progress across technical domains.
+#### An event-driven backend platform demonstrating RabbitMQ, Kafka, Redis queues, outbox pattern, retries, idempotency, dead letter queues, saga basics, eventual consistency, background jobs, async workflows, and distributed backend communication.
