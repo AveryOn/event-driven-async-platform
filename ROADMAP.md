@@ -1,1921 +1,1921 @@
 # Event Driven Async Platform Roadmap
 
-## 1. Основы event-driven и asynchronous systems
+## 1. Fundamentals of event-driven and asynchronous systems
 
-### 001. Исследовать synchronous и asynchronous communication
+### 001. Research synchronous and asynchronous communication
 
-Сравнить request-response взаимодействие с асинхронной передачей сообщений по связанности, latency, доступности, отказоустойчивости и сложности эксплуатации.
+Compare request-response interaction with asynchronous message transmission in terms of coupling, latency, availability, fault tolerance, and operational complexity.
 
-### 002. Исследовать event-driven architecture
+### 002. Research event-driven architecture
 
-Разобрать producers, consumers, brokers, event channels, subscriptions и влияние event-driven подхода на границы backend-сервисов.
+Examine producers, consumers, brokers, event channels, subscriptions, and the impact of the event-driven approach on backend service boundaries.
 
-### 003. Разделить command, event и job
+### 003. Separate command, event, and job
 
-Определить семантические различия между командой, фактом произошедшего события и фоновой задачей, закрепив правила их использования в платформе.
+Define the semantic differences between a command, a fact of an event that has occurred, and a background task, establishing rules for their use in the platform.
 
-### 004. Исследовать message delivery guarantees
+### 004. Research message delivery guarantees
 
-Разобрать at-most-once, at-least-once и effectively-once delivery, а также ограничения практической реализации exactly-once semantics.
+Examine at-most-once, at-least-once, and effectively-once delivery, as well as the limitations of the practical implementation of exactly-once semantics.
 
-### 005. Исследовать message ordering
+### 005. Research message ordering
 
-Разобрать global ordering, partition ordering, aggregate ordering и причины нарушения порядка при параллельной обработке.
+Examine global ordering, partition ordering, aggregate ordering, and the causes of order violations during parallel processing.
 
-### 006. Исследовать eventual consistency
+### 006. Research eventual consistency
 
-Определить модель согласованности между сервисами, возможные временные расхождения данных и способы их обнаружения и устранения.
+Define the consistency model between services, possible temporary data discrepancies, and methods for detecting and resolving them.
 
-### 007. Исследовать CAP theorem
+### 007. Research the CAP theorem
 
-Рассмотреть влияние network partition на доступность, согласованность и поведение распределённых asynchronous workflows.
+Consider the impact of a network partition on availability, consistency, and the behavior of distributed asynchronous workflows.
 
-### 008. Исследовать PACELC
+### 008. Research PACELC
 
-Разобрать компромисс между latency и consistency при нормальной работе системы и при сетевых разделениях.
+Examine the trade-off between latency and consistency during normal system operation and during network partitions.
 
-### 009. Исследовать backpressure
+### 009. Research backpressure
 
-Определить способы ограничения producers, consumers и очередей при превышении пропускной способности платформы.
+Define methods for limiting producers, consumers, and queues when the platform throughput capacity is exceeded.
 
-### 010. Составить taxonomy отказов
+### 010. Create a failure taxonomy
 
-Классифицировать transient, permanent, infrastructure, business, serialization и poison-message failures.
+Classify transient, permanent, infrastructure, business, serialization, and poison-message failures.
 
-### 011. Исследовать retry semantics
+### 011. Research retry semantics
 
-Разобрать immediate retry, delayed retry, exponential backoff, jitter, retry budget и ограничения количества повторов.
+Examine immediate retry, delayed retry, exponential backoff, jitter, retry budget, and limitations on the number of retries.
 
-### 012. Исследовать idempotency
+### 012. Research idempotency
 
-Определить требования к идемпотентной обработке команд, событий, HTTP-запросов и внешних side effects.
+Define requirements for the idempotent processing of commands, events, HTTP requests, and external side effects.
 
-### 013. Исследовать deduplication
+### 013. Research deduplication
 
-Сравнить producer-side, broker-side и consumer-side deduplication, включая временные окна и хранение ключей.
+Compare producer-side, broker-side, and consumer-side deduplication, including time windows and key storage.
 
-### 014. Исследовать dead letter queues
+### 014. Research dead letter queues
 
-Разобрать назначение DLQ, причины попадания сообщений, правила хранения, анализа и повторной обработки.
+Examine the purpose of a DLQ, the reasons messages are placed in it, and the rules for storage, analysis, and reprocessing.
 
-### 015. Исследовать poison messages
+### 015. Research poison messages
 
-Определить признаки сообщений, которые постоянно ломают consumer, и способы их изоляции без остановки основного потока.
+Define the characteristics of messages that repeatedly break a consumer and methods for isolating them without stopping the main flow.
 
-### 016. Исследовать distributed transactions
+### 016. Research distributed transactions
 
-Сравнить 2PC, transactional outbox, saga и compensation-based подходы.
+Compare 2PC, transactional outbox, saga, and compensation-based approaches.
 
-### 017. Исследовать saga pattern
+### 017. Research the saga pattern
 
-Разобрать choreography и orchestration, локальные транзакции, компенсирующие операции и состояние saga.
+Examine choreography and orchestration, local transactions, compensating operations, and saga state.
 
-### 018. Исследовать stream processing и message queuing
+### 018. Research stream processing and message queuing
 
-Сравнить журнал событий Kafka с очередями RabbitMQ и Redis-based job queues.
+Compare the Kafka event log with RabbitMQ queues and Redis-based job queues.
 
-### 019. Исследовать push и pull consumption
+### 019. Research push and pull consumption
 
-Разобрать модели получения сообщений, управление скоростью consumers и влияние на backpressure.
+Examine message retrieval models, consumer rate control, and the impact on backpressure.
 
-### 020. Зафиксировать базовые гарантии платформы
+### 020. Establish the platform's baseline guarantees
 
-Документировать выбранные delivery, ordering, consistency, retry и durability guarantees для каждого транспорта.
+Document the selected delivery, ordering, consistency, retry, and durability guarantees for each transport.
 
-## 2. Структура репозитория и базовая инфраструктура
+## 2. Repository structure and basic infrastructure
 
-### 021. Создать monorepo
+### 021. Create a monorepo
 
-Настроить workspace для нескольких NestJS-приложений, shared libraries, contracts, infrastructure adapters и тестовых утилит.
+Configure a workspace for multiple NestJS applications, shared libraries, contracts, infrastructure adapters, and testing utilities.
 
-### 022. Определить структуру приложений
+### 022. Define the application structure
 
-Создать отдельные приложения для Order, Inventory, Payment, Notification, Workflow и Event Gateway сервисов.
+Create separate applications for the Order, Inventory, Payment, Notification, Workflow, and Event Gateway services.
 
-### 023. Определить shared libraries
+### 023. Define shared libraries
 
-Выделить библиотеки для event contracts, message envelope, observability, broker clients, idempotency и testing.
+Extract libraries for event contracts, message envelope, observability, broker clients, idempotency, and testing.
 
-### 024. Настроить TypeScript
+### 024. Configure TypeScript
 
-Включить strict mode, project references, path aliases и отдельные конфигурации для приложений и библиотек.
+Enable strict mode, project references, path aliases, and separate configurations for applications and libraries.
 
-### 025. Настроить linting и formatting
+### 025. Configure linting and formatting
 
-Добавить ESLint, Prettier и правила для предотвращения небезопасного async-кода и необработанных Promise.
+Add ESLint, Prettier, and rules to prevent unsafe async code and unhandled Promises.
 
-### 026. Настроить environment validation
+### 026. Configure environment validation
 
-Реализовать проверку конфигурации RabbitMQ, Kafka, Redis, PostgreSQL и observability через Zod или Joi.
+Implement validation of RabbitMQ, Kafka, Redis, PostgreSQL, and observability configuration through Zod or Joi.
 
-### 027. Создать Docker Compose окружение
+### 027. Create a Docker Compose environment
 
-Добавить PostgreSQL, RabbitMQ, Kafka, Redis и необходимые административные интерфейсы.
+Add PostgreSQL, RabbitMQ, Kafka, Redis, and the required administration interfaces.
 
-### 028. Добавить health checks контейнеров
+### 028. Add container health checks
 
-Настроить проверки готовности инфраструктурных сервисов и зависимости startup order.
+Configure infrastructure service readiness checks and startup order dependencies.
 
-### 029. Настроить локальные network aliases
+### 029. Configure local network aliases
 
-Создать стабильные DNS-имена сервисов для одинаковой конфигурации локального и containerized запуска.
+Create stable service DNS names for identical local and containerized launch configuration.
 
-### 030. Добавить development scripts
+### 030. Add development scripts
 
-Реализовать команды запуска всей платформы, отдельных сервисов, migrations, seeds и infrastructure-only окружения.
+Implement commands for launching the entire platform, individual services, migrations, seeds, and an infrastructure-only environment.
 
-### 031. Настроить PostgreSQL migrations
+### 031. Configure PostgreSQL migrations
 
-Создать независимые схемы или базы данных для сервисов и запретить прямой доступ к чужим таблицам.
+Create independent schemas or databases for services and prohibit direct access to other services' tables.
 
-### 032. Добавить seed data
+### 032. Add seed data
 
-Подготовить воспроизводимые данные для order, inventory, payment и workflow сценариев.
+Prepare reproducible data for order, inventory, payment, and workflow scenarios.
 
-### 033. Реализовать graceful shutdown
+### 033. Implement graceful shutdown
 
-Корректно останавливать HTTP-серверы, consumers, producers, workers и database connections.
+Correctly stop HTTP servers, consumers, producers, workers, and database connections.
 
-### 034. Реализовать startup sequencing
+### 034. Implement startup sequencing
 
-Не запускать consumers до готовности базы данных, broker connections и обязательных migrations.
+Do not start consumers until the database, broker connections, and required migrations are ready.
 
-### 035. Добавить readiness probes
+### 035. Add readiness probes
 
-Проверять возможность сервиса принимать трафик и обрабатывать сообщения.
+Check whether a service can accept traffic and process messages.
 
-### 036. Добавить liveness probes
+### 036. Add liveness probes
 
-Обнаруживать зависшие процессы без ложного срабатывания при временной недоступности broker.
+Detect hung processes without false positives during temporary broker unavailability.
 
-### 037. Настроить централизованную конфигурацию transports
+### 037. Configure centralized transport configuration
 
-Создать типизированные настройки exchanges, queues, topics, consumer groups и Redis queues.
+Create typed settings for exchanges, queues, topics, consumer groups, and Redis queues.
 
-### 038. Создать abstraction для clock
+### 038. Create an abstraction for the clock
 
-Использовать ClockPort для детерминированного тестирования timeout, retries и scheduled jobs.
+Use ClockPort for deterministic testing of timeouts, retries, and scheduled jobs.
 
-### 039. Создать abstraction для ID generation
+### 039. Create an abstraction for ID generation
 
-Реализовать UUID или ULID generation через отдельный port для тестируемости и сортируемых идентификаторов.
+Implement UUID or ULID generation through a separate port for testability and sortable identifiers.
 
-### 040. Создать abstraction для transactions
+### 040. Create an abstraction for transactions
 
-Определить TransactionPort, позволяющий application layer выполнять локальные транзакции без зависимости от ORM.
+Define TransactionPort, allowing the application layer to execute local transactions without depending on the ORM.
 
-## 3. Domain model и service boundaries
+## 3. Domain model and service boundaries
 
-### 041. Определить демонстрационный business flow
+### 041. Define the demonstration business flow
 
-Использовать сценарий Order → Inventory Reservation → Payment → Notification как основной распределённый workflow.
+Use the Order → Inventory Reservation → Payment → Notification scenario as the primary distributed workflow.
 
-### 042. Определить bounded contexts
+### 042. Define bounded contexts
 
-Разделить Order, Inventory, Payment, Notification и Workflow по ответственности и владению данными.
+Separate Order, Inventory, Payment, Notification, and Workflow by responsibility and data ownership.
 
-### 043. Определить aggregate boundaries
+### 043. Define aggregate boundaries
 
-Выделить Order, InventoryItem, Payment и SagaInstance как независимые consistency boundaries.
+Extract Order, InventoryItem, Payment, and SagaInstance as independent consistency boundaries.
 
-### 044. Спроектировать Order state machine
+### 044. Design the Order state machine
 
-Определить состояния CREATED, INVENTORY_PENDING, PAYMENT_PENDING, COMPLETED, CANCELLED и FAILED.
+Define the CREATED, INVENTORY_PENDING, PAYMENT_PENDING, COMPLETED, CANCELLED, and FAILED states.
 
-### 045. Спроектировать Payment state machine
+### 045. Design the Payment state machine
 
-Определить состояния CREATED, PROCESSING, SUCCEEDED, DECLINED, REFUND_PENDING и REFUNDED.
+Define the CREATED, PROCESSING, SUCCEEDED, DECLINED, REFUND_PENDING, and REFUNDED states.
 
-### 046. Спроектировать Inventory reservation model
+### 046. Design the Inventory reservation model
 
-Реализовать резервирование, подтверждение и освобождение остатков без прямого изменения данных Order Service.
+Implement reservation, confirmation, and release of stock without directly changing Order Service data.
 
-### 047. Спроектировать Notification model
+### 047. Design the Notification model
 
-Разделить notification request, delivery attempt и delivery result.
+Separate notification request, delivery attempt, and delivery result.
 
-### 048. Определить ownership данных
+### 048. Define data ownership
 
-Задокументировать, какой сервис является source of truth для каждого типа данных.
+Document which service is the source of truth for each data type.
 
-### 049. Запретить shared database integration
+### 049. Prohibit shared database integration
 
-Обеспечить взаимодействие сервисов только через API, commands и events.
+Ensure service interaction only through APIs, commands, and events.
 
-### 050. Определить публичные HTTP API
+### 050. Define public HTTP APIs
 
-Создать минимальные synchronous endpoints для создания заказа, просмотра состояния и административных операций.
+Create minimal synchronous endpoints for order creation, state viewing, and administrative operations.
 
-### 051. Определить asynchronous commands
+### 051. Define asynchronous commands
 
-Составить список команд ReserveInventory, ProcessPayment, ReleaseInventory, RefundPayment и SendNotification.
+Create a list of the ReserveInventory, ProcessPayment, ReleaseInventory, RefundPayment, and SendNotification commands.
 
-### 052. Определить domain events
+### 052. Define domain events
 
-Составить список OrderCreated, InventoryReserved, InventoryRejected, PaymentSucceeded, PaymentFailed и OrderCompleted.
+Create a list of the OrderCreated, InventoryReserved, InventoryRejected, PaymentSucceeded, PaymentFailed, and OrderCompleted events.
 
-### 053. Определить integration events
+### 053. Define integration events
 
-Отделить внутренние domain events от событий, публикуемых за границы сервиса.
+Separate internal domain events from events published outside the service boundary.
 
-### 054. Реализовать application handlers
+### 054. Implement application handlers
 
-Создать отдельные handlers для HTTP commands, broker commands и events.
+Create separate handlers for HTTP commands, broker commands, and events.
 
-### 055. Реализовать infrastructure ports
+### 055. Implement infrastructure ports
 
-Определить MessagePublisherPort, MessageConsumerPort, JobQueuePort, IdempotencyStorePort и EventStorePort.
+Define MessagePublisherPort, MessageConsumerPort, JobQueuePort, IdempotencyStorePort, and EventStorePort.
 
-### 056. Реализовать transport adapters
+### 056. Implement transport adapters
 
-Создать отдельные adapters для RabbitMQ, Kafka и Redis queues.
+Create separate adapters for RabbitMQ, Kafka, and Redis queues.
 
-### 057. Реализовать repository ports
+### 057. Implement repository ports
 
-Изолировать domain и application layers от PostgreSQL и выбранного ORM.
+Isolate the domain and application layers from PostgreSQL and the selected ORM.
 
-### 058. Ввести dependency rules
+### 058. Introduce dependency rules
 
-Запретить зависимости domain/application слоёв от NestJS transport clients, broker SDK и ORM.
+Prohibit dependencies of the domain/application layers on NestJS transport clients, broker SDKs, and the ORM.
 
-### 059. Добавить architecture tests
+### 059. Add architecture tests
 
-Автоматически проверять допустимые направления импортов между слоями и модулями.
+Automatically verify permitted import directions between layers and modules.
 
-### 060. Документировать service boundaries
+### 060. Document service boundaries
 
-Зафиксировать ответственность, входные команды, выходные события и owned data каждого сервиса.
+Establish the responsibility, incoming commands, outgoing events, and owned data of each service.
 
-## 4. Message contracts и schema governance
+## 4. Message contracts and schema governance
 
-### 061. Создать общий message envelope
+### 061. Create a common message envelope
 
-Добавить messageId, messageType, messageVersion, occurredAt, producer, payload и metadata.
+Add messageId, messageType, messageVersion, occurredAt, producer, payload, and metadata.
 
-### 062. Добавить correlationId
+### 062. Add correlationId
 
-Передавать идентификатор всего distributed workflow между HTTP-запросами, событиями и jobs.
+Pass the identifier of the entire distributed workflow between HTTP requests, events, and jobs.
 
-### 063. Добавить causationId
+### 063. Add causationId
 
-Хранить идентификатор сообщения, вызвавшего публикацию текущего сообщения.
+Store the identifier of the message that caused publication of the current message.
 
-### 064. Добавить trace context
+### 064. Add trace context
 
-Передавать W3C traceparent и tracestate через broker headers.
+Pass W3C traceparent and tracestate through broker headers.
 
-### 065. Добавить tenant context
+### 065. Add tenant context
 
-Реализовать безопасную передачу tenantId без доверия к произвольному payload.
+Implement secure transmission of tenantId without trusting an arbitrary payload.
 
-### 066. Добавить actor context
+### 066. Add actor context
 
-Передавать минимально необходимую информацию об инициаторе действия без публикации чувствительных данных.
+Pass the minimum required information about the initiator of the action without publishing sensitive data.
 
-### 067. Реализовать runtime validation
+### 067. Implement runtime validation
 
-Проверять message envelope и payload до передачи сообщения application handler.
+Validate the message envelope and payload before passing the message to the application handler.
 
-### 068. Выбрать формат сериализации
+### 068. Select a serialization format
 
-Сравнить JSON, Avro и Protobuf и реализовать базовый формат для платформы.
+Compare JSON, Avro, and Protobuf and implement the baseline format for the platform.
 
-### 069. Ввести event versioning
+### 069. Introduce event versioning
 
-Использовать явную версию contract и запретить неуправляемое изменение существующей схемы.
+Use an explicit contract version and prohibit uncontrolled modification of an existing schema.
 
-### 070. Реализовать backward compatibility rules
+### 070. Implement backward compatibility rules
 
-Определить допустимые изменения полей, defaults, optional fields и enum values.
+Define permitted changes to fields, defaults, optional fields, and enum values.
 
-### 071. Реализовать upcasting
+### 071. Implement upcasting
 
-Преобразовывать старые версии событий в актуальную internal representation.
+Convert old event versions into the current internal representation.
 
-### 072. Реализовать schema registry abstraction
+### 072. Implement a schema registry abstraction
 
-Создать интерфейс регистрации, получения и проверки совместимости message schemas.
+Create an interface for registering, retrieving, and checking compatibility of message schemas.
 
-### 073. Добавить schema compatibility tests
+### 073. Add schema compatibility tests
 
-Проверять backward и forward compatibility при каждом изменении contracts.
+Check backward and forward compatibility with every contract change.
 
-### 074. Создать event catalog
+### 074. Create an event catalog
 
-Документировать producers, consumers, payload, version, ordering key и retention для каждого события.
+Document producers, consumers, payload, version, ordering key, and retention for each event.
 
-### 075. Добавить payload size limits
+### 075. Add payload size limits
 
-Отклонять чрезмерно большие сообщения и использовать reference-based payload для крупных данных.
+Reject excessively large messages and use a reference-based payload for large data.
 
 ## 5. RabbitMQ
 
-### 076. Подключить RabbitMQ client
+### 076. Connect a RabbitMQ client
 
-Реализовать управляемое соединение, channels, reconnect и shutdown для NestJS-приложений.
+Implement managed connection, channels, reconnect, and shutdown for NestJS applications.
 
-### 077. Исследовать AMQP model
+### 077. Research the AMQP model
 
-Практически проверить exchanges, queues, bindings, routing keys, acknowledgements и publisher confirms.
+Practically verify exchanges, queues, bindings, routing keys, acknowledgements, and publisher confirms.
 
-### 078. Реализовать direct exchange
+### 078. Implement a direct exchange
 
-Использовать direct routing для адресных business commands.
+Use direct routing for targeted business commands.
 
-### 079. Реализовать topic exchange
+### 079. Implement a topic exchange
 
-Использовать topic routing для domain и integration events.
+Use topic routing for domain and integration events.
 
-### 080. Реализовать fanout exchange
+### 080. Implement a fanout exchange
 
-Продемонстрировать broadcast-событие для независимых subscribers.
+Demonstrate a broadcast event for independent subscribers.
 
-### 081. Исследовать headers exchange
+### 081. Research a headers exchange
 
-Реализовать отдельный пример маршрутизации по message headers и оценить его ограничения.
+Implement a separate example of routing by message headers and evaluate its limitations.
 
-### 082. Настроить durable exchanges и queues
+### 082. Configure durable exchanges and queues
 
-Обеспечить сохранение topology и сообщений после перезапуска broker.
+Ensure topology and messages are preserved after a broker restart.
 
-### 083. Настроить persistent messages
+### 083. Configure persistent messages
 
-Проверить влияние deliveryMode и publisher confirms на durability.
+Verify the impact of deliveryMode and publisher confirms on durability.
 
-### 084. Реализовать publisher confirms
+### 084. Implement publisher confirms
 
-Считать публикацию успешной только после broker confirmation.
+Consider publication successful only after broker confirmation.
 
-### 085. Обработать publisher nacks
+### 085. Handle publisher nacks
 
-Реализовать повторную публикацию или запись в local recovery storage при отрицательном подтверждении.
+Implement republishing or writing to local recovery storage upon negative acknowledgement.
 
-### 086. Реализовать mandatory publishing
+### 086. Implement mandatory publishing
 
-Обнаруживать сообщения, для которых отсутствует подходящий binding или queue.
+Detect messages for which no suitable binding or queue exists.
 
-### 087. Обработать returned messages
+### 087. Handle returned messages
 
-Логировать и сохранять unroutable messages для анализа и повторной маршрутизации.
+Log and store unroutable messages for analysis and rerouting.
 
-### 088. Реализовать manual acknowledgement
+### 088. Implement manual acknowledgement
 
-Подтверждать сообщение только после успешной application и persistence обработки.
+Acknowledge a message only after successful application and persistence processing.
 
-### 089. Реализовать negative acknowledgement
+### 089. Implement negative acknowledgement
 
-Разделить requeue, reject и dead-letter поведение для разных типов ошибок.
+Separate requeue, reject, and dead-letter behavior for different error types.
 
-### 090. Настроить consumer prefetch
+### 090. Configure consumer prefetch
 
-Ограничить количество unacknowledged сообщений и проверить влияние на throughput и fairness.
+Limit the number of unacknowledged messages and verify the impact on throughput and fairness.
 
-### 091. Реализовать competing consumers
+### 091. Implement competing consumers
 
-Запустить несколько instances одного consumer и проверить распределение нагрузки.
+Launch several instances of one consumer and verify load distribution.
 
-### 092. Проверить ordering при competing consumers
+### 092. Verify ordering with competing consumers
 
-Зафиксировать, при каких условиях RabbitMQ перестаёт обеспечивать ожидаемый порядок.
+Establish the conditions under which RabbitMQ stops providing the expected order.
 
-### 093. Реализовать routing по aggregateId
+### 093. Implement routing by aggregateId
 
-Создать стратегию направления связанных сообщений одному последовательному consumer.
+Create a strategy for directing related messages to one sequential consumer.
 
-### 094. Настроить message TTL
+### 094. Configure message TTL
 
-Удалять или dead-letter просроченные commands и jobs.
+Delete or dead-letter expired commands and jobs.
 
-### 095. Настроить queue TTL
+### 095. Configure queue TTL
 
-Автоматически удалять временные очереди после периода неактивности.
+Automatically delete temporary queues after a period of inactivity.
 
-### 096. Настроить max-length policies
+### 096. Configure max-length policies
 
-Ограничить размер очередей по количеству сообщений и объёму данных.
+Limit queue size by message count and data volume.
 
-### 097. Реализовать dead-letter exchange
+### 097. Implement a dead-letter exchange
 
-Создать отдельные DLX и DLQ для каждой business queue.
+Create separate DLX and DLQ instances for each business queue.
 
-### 098. Реализовать delayed retries через TTL queues
+### 098. Implement delayed retries through TTL queues
 
-Создать retry queues с несколькими уровнями задержки без бесконечного immediate requeue.
+Create retry queues with multiple delay levels without infinite immediate requeue.
 
-### 099. Исследовать delayed message exchange
+### 099. Research the delayed message exchange
 
-Сравнить RabbitMQ Delayed Message Plugin с TTL-based retry topology.
+Compare the RabbitMQ Delayed Message Plugin with TTL-based retry topology.
 
-### 100. Реализовать priority queue
+### 100. Implement a priority queue
 
-Добавить демонстрационный сценарий обработки срочных команд и проверить риск starvation.
+Add a demonstration scenario for processing urgent commands and verify the risk of starvation.
 
-### 101. Исследовать quorum queues
+### 101. Research quorum queues
 
-Настроить replicated quorum queues и проверить поведение при отказе broker node.
+Configure replicated quorum queues and verify behavior when a broker node fails.
 
-### 102. Сравнить classic и quorum queues
+### 102. Compare classic and quorum queues
 
-Зафиксировать различия в latency, throughput, replication и operational semantics.
+Establish differences in latency, throughput, replication, and operational semantics.
 
-### 103. Настроить RabbitMQ policies
+### 103. Configure RabbitMQ policies
 
-Управлять TTL, max-length, DLX и queue type через policies, а не только application code.
+Manage TTL, max-length, DLX, and queue type through policies, not only application code.
 
-### 104. Реализовать topology assertion
+### 104. Implement topology assertion
 
-Автоматически создавать и проверять exchanges, queues и bindings при старте приложения.
+Automatically create and verify exchanges, queues, and bindings when the application starts.
 
-### 105. Обработать topology mismatch
+### 105. Handle topology mismatch
 
-Корректно завершать startup при несовместимых параметрах существующей queue или exchange.
+Correctly terminate startup when existing queue or exchange parameters are incompatible.
 
-### 106. Реализовать connection recovery
+### 106. Implement connection recovery
 
-Восстанавливать соединения и consumers после временной недоступности RabbitMQ.
+Restore connections and consumers after temporary RabbitMQ unavailability.
 
-### 107. Обработать channel failure
+### 107. Handle channel failure
 
-Пересоздавать channel и consumer registration без перезапуска всего сервиса.
+Recreate the channel and consumer registration without restarting the entire service.
 
-### 108. Обработать consumer cancellation
+### 108. Handle consumer cancellation
 
-Регистрировать broker-initiated cancellation и восстанавливать consumption.
+Register broker-initiated cancellation and restore consumption.
 
-### 109. Исследовать RabbitMQ flow control
+### 109. Research RabbitMQ flow control
 
-Проверить поведение producers при memory alarm, disk alarm и publisher blocking.
+Verify producer behavior during a memory alarm, disk alarm, and publisher blocking.
 
-### 110. Настроить RabbitMQ Management API
+### 110. Configure the RabbitMQ Management API
 
-Получать queue depth, consumer count, publish rate, delivery rate и unacked messages.
+Retrieve queue depth, consumer count, publish rate, delivery rate, and unacked messages.
 
 ## 6. Kafka
 
-### 111. Развернуть Kafka в KRaft mode
+### 111. Deploy Kafka in KRaft mode
 
-Настроить локальный кластер без ZooKeeper и документировать broker/controller roles.
+Configure a local cluster without ZooKeeper and document broker/controller roles.
 
-### 112. Подключить Kafka client
+### 112. Connect a Kafka client
 
-Реализовать producer, consumer, admin client, lifecycle hooks и reconnect handling.
+Implement a producer, consumer, admin client, lifecycle hooks, and reconnect handling.
 
-### 113. Создать topic naming convention
+### 113. Create a topic naming convention
 
-Определить правила имён для domain events, integration events, retry и dead-letter topics.
+Define naming rules for domain events, integration events, retry topics, and dead-letter topics.
 
-### 114. Исследовать partitions
+### 114. Research partitions
 
-Проверить влияние partition count на parallelism, ordering и scalability.
+Verify the impact of partition count on parallelism, ordering, and scalability.
 
-### 115. Реализовать partition key strategy
+### 115. Implement a partition key strategy
 
-Использовать aggregateId или sagaId для сохранения порядка связанных событий.
+Use aggregateId or sagaId to preserve the order of related events.
 
-### 116. Настроить replication factor
+### 116. Configure the replication factor
 
-Определить параметры replication для development и production environments.
+Define replication parameters for development and production environments.
 
-### 117. Исследовать ISR
+### 117. Research ISR
 
-Проверить влияние in-sync replicas на доступность записи и durability.
+Verify the impact of in-sync replicas on write availability and durability.
 
-### 118. Настроить producer acknowledgements
+### 118. Configure producer acknowledgements
 
-Сравнить acks=0, acks=1 и acks=all по latency и риску потери данных.
+Compare acks=0, acks=1, and acks=all in terms of latency and data-loss risk.
 
-### 119. Настроить min.insync.replicas
+### 119. Configure min.insync.replicas
 
-Предотвратить подтверждение записи при недостаточном количестве актуальных replicas.
+Prevent write acknowledgement when there are not enough up-to-date replicas.
 
-### 120. Реализовать idempotent producer
+### 120. Implement an idempotent producer
 
-Включить producer idempotence и проверить устранение duplicate records при retries.
+Enable producer idempotence and verify elimination of duplicate records during retries.
 
-### 121. Настроить producer retries
+### 121. Configure producer retries
 
-Определить retry count, delivery timeout, request timeout и backoff.
+Define retry count, delivery timeout, request timeout, and backoff.
 
-### 122. Исследовать producer batching
+### 122. Research producer batching
 
-Настроить batch.size и linger.ms и измерить компромисс между throughput и latency.
+Configure batch.size and linger.ms and measure the trade-off between throughput and latency.
 
-### 123. Исследовать compression
+### 123. Research compression
 
-Сравнить gzip, snappy, lz4 и zstd на демонстрационной нагрузке.
+Compare gzip, snappy, lz4, and zstd under a demonstration load.
 
-### 124. Реализовать consumer group
+### 124. Implement a consumer group
 
-Запустить несколько consumers в одной группе и проверить распределение partitions.
+Launch multiple consumers in one group and verify partition distribution.
 
-### 125. Реализовать независимые consumer groups
+### 125. Implement independent consumer groups
 
-Подключить несколько сервисов к одному topic без взаимного влияния offset.
+Connect several services to one topic without mutual impact on offsets.
 
-### 126. Исследовать offset management
+### 126. Research offset management
 
-Сравнить automatic и manual offset commits.
+Compare automatic and manual offset commits.
 
-### 127. Реализовать commit после обработки
+### 127. Implement commit after processing
 
-Фиксировать offset только после успешной business transaction.
+Commit the offset only after a successful business transaction.
 
-### 128. Исследовать commit failure windows
+### 128. Research commit failure windows
 
-Определить сценарии duplicate processing и message loss между обработкой и offset commit.
+Define duplicate processing and message-loss scenarios between processing and offset commit.
 
-### 129. Реализовать batch consumption
+### 129. Implement batch consumption
 
-Обрабатывать набор records с контролем частичного failure и offset progression.
+Process a set of records with control over partial failure and offset progression.
 
-### 130. Настроить consumer concurrency
+### 130. Configure consumer concurrency
 
-Соотнести число consumer instances и handlers с количеством partitions.
+Align the number of consumer instances and handlers with the number of partitions.
 
-### 131. Исследовать rebalancing
+### 131. Research rebalancing
 
-Проверить stop-the-world rebalance при подключении и отключении consumers.
+Verify stop-the-world rebalance when consumers connect and disconnect.
 
-### 132. Настроить cooperative rebalancing
+### 132. Configure cooperative rebalancing
 
-Снизить объём перераспределяемых partitions при изменении consumer group.
+Reduce the volume of redistributed partitions when the consumer group changes.
 
-### 133. Реализовать rebalance listeners
+### 133. Implement rebalance listeners
 
-Корректно завершать обработку records перед отзывом partition.
+Correctly finish record processing before partition revocation.
 
-### 134. Настроить heartbeat и session timeout
+### 134. Configure heartbeat and session timeout
 
-Предотвратить ложные rebalances при долгой обработке сообщений.
+Prevent false rebalances during long message processing.
 
-### 135. Реализовать pause и resume
+### 135. Implement pause and resume
 
-Временно останавливать consumption при перегрузке базы данных или downstream dependency.
+Temporarily stop consumption when the database or a downstream dependency is overloaded.
 
-### 136. Настроить retention policy
+### 136. Configure the retention policy
 
-Определить срок хранения событий по времени и объёму.
+Define the event retention period by time and volume.
 
-### 137. Реализовать log compaction
+### 137. Implement log compaction
 
-Создать compacted topic для последнего состояния entity или configuration.
+Create a compacted topic for the latest state of an entity or configuration.
 
-### 138. Проверить tombstone records
+### 138. Verify tombstone records
 
-Реализовать удаление ключа из compacted topic через null payload.
+Implement key deletion from a compacted topic through a null payload.
 
-### 139. Реализовать retry topics
+### 139. Implement retry topics
 
-Создать отдельные topics для нескольких уровней delayed retry.
+Create separate topics for multiple levels of delayed retry.
 
-### 140. Реализовать Kafka dead-letter topic
+### 140. Implement a Kafka dead-letter topic
 
-Перемещать окончательно необрабатываемые records вместе с failure metadata.
+Move permanently unprocessable records together with failure metadata.
 
-### 141. Реализовать retry topic consumer
+### 141. Implement a retry topic consumer
 
-Переиздавать сообщения в основной topic после наступления nextAttemptAt.
+Republish messages to the main topic after nextAttemptAt is reached.
 
-### 142. Исследовать Kafka transactions
+### 142. Research Kafka transactions
 
-Реализовать атомарную публикацию нескольких records в рамках producer transaction.
+Implement atomic publication of multiple records within a producer transaction.
 
-### 143. Исследовать consume-transform-produce
+### 143. Research consume-transform-produce
 
-Реализовать transactional обработку, связывающую consumed offsets и produced records.
+Implement transactional processing that links consumed offsets and produced records.
 
-### 144. Проверить read_committed isolation
+### 144. Verify read_committed isolation
 
-Исключить чтение aborted transactional records.
+Exclude reading aborted transactional records.
 
-### 145. Исследовать exactly-once semantics Kafka
+### 145. Research Kafka exactly-once semantics
 
-Документировать область действия Kafka EOS и ограничения внешних side effects и PostgreSQL.
+Document the scope of Kafka EOS and the limitations involving external side effects and PostgreSQL.
 
-### 146. Реализовать event replay
+### 146. Implement event replay
 
-Повторно обработать topic с нового consumer group или сброшенного offset.
+Reprocess a topic with a new consumer group or a reset offset.
 
-### 147. Реализовать selective replay
+### 147. Implement selective replay
 
-Повторно обработать records по диапазону offsets, timestamps или business keys.
+Reprocess records by offset ranges, timestamps, or business keys.
 
-### 148. Проверить partition expansion
+### 148. Verify partition expansion
 
-Добавить partitions и исследовать изменение распределения ключей и ordering guarantees.
+Add partitions and research changes in key distribution and ordering guarantees.
 
-### 149. Реализовать Kafka Admin tooling
+### 149. Implement Kafka Admin tooling
 
-Создавать topics, проверять configuration, offsets, lag и consumer groups через CLI.
+Create topics and verify configuration, offsets, lag, and consumer groups through the CLI.
 
-### 150. Настроить consumer lag monitoring
+### 150. Configure consumer lag monitoring
 
-Вычислять lag по partitions и агрегировать его по consumer group.
+Calculate lag by partition and aggregate it by consumer group.
 
-## 7. Redis queues и background jobs
+## 7. Redis queues and background jobs
 
-### 151. Подключить BullMQ
+### 151. Connect BullMQ
 
-Настроить Queue, Worker, QueueEvents и Redis connections.
+Configure Queue, Worker, QueueEvents, and Redis connections.
 
-### 152. Создать background job contracts
+### 152. Create background job contracts
 
-Отделить job name, payload schema, options и result schema от конкретного Worker.
+Separate job name, payload schema, options, and result schema from the specific Worker.
 
-### 153. Реализовать базовый Worker
+### 153. Implement a basic Worker
 
-Обрабатывать jobs с контролируемой concurrency и graceful shutdown.
+Process jobs with controlled concurrency and graceful shutdown.
 
-### 154. Исследовать job states
+### 154. Research job states
 
-Проверить transitions между waiting, active, completed, failed, delayed и stalled.
+Verify transitions between waiting, active, completed, failed, delayed, and stalled.
 
-### 155. Реализовать delayed jobs
+### 155. Implement delayed jobs
 
-Запланировать выполнение задачи через заданный интервал.
+Schedule task execution after a specified interval.
 
-### 156. Реализовать scheduled jobs
+### 156. Implement scheduled jobs
 
-Создать повторяющиеся jobs для reconciliation, cleanup и reporting.
+Create recurring jobs for reconciliation, cleanup, and reporting.
 
-### 157. Исследовать repeatable job uniqueness
+### 157. Research repeatable job uniqueness
 
-Предотвратить случайное создание нескольких одинаковых schedules.
+Prevent accidental creation of multiple identical schedules.
 
-### 158. Реализовать job priority
+### 158. Implement job priority
 
-Обработать срочные и обычные задачи с документированным риском starvation.
+Process urgent and regular tasks with a documented risk of starvation.
 
-### 159. Настроить worker concurrency
+### 159. Configure worker concurrency
 
-Измерить влияние concurrency на CPU-bound, I/O-bound и rate-limited jobs.
+Measure the impact of concurrency on CPU-bound, I/O-bound, and rate-limited jobs.
 
-### 160. Реализовать queue rate limiting
+### 160. Implement queue rate limiting
 
-Ограничить частоту вызовов внешнего Notification Provider.
+Limit the frequency of calls to the external Notification Provider.
 
-### 161. Реализовать per-tenant rate limiting
+### 161. Implement per-tenant rate limiting
 
-Не позволять одному tenant занять всю пропускную способность очереди.
+Prevent one tenant from occupying the entire queue throughput capacity.
 
-### 162. Реализовать attempts и backoff
+### 162. Implement attempts and backoff
 
-Настроить fixed и exponential retry для background jobs.
+Configure fixed and exponential retries for background jobs.
 
-### 163. Реализовать custom backoff
+### 163. Implement custom backoff
 
-Учитывать тип ошибки, Retry-After и business constraints.
+Account for error type, Retry-After, and business constraints.
 
-### 164. Реализовать jobId deduplication
+### 164. Implement jobId deduplication
 
-Использовать deterministic jobId для предотвращения повторного добавления одинаковой задачи.
+Use a deterministic jobId to prevent repeated addition of the same task.
 
-### 165. Исследовать deduplication modes BullMQ
+### 165. Research BullMQ deduplication modes
 
-Сравнить simple, throttle и debounce semantics.
+Compare simple, throttle, and debounce semantics.
 
-### 166. Обработать stalled jobs
+### 166. Handle stalled jobs
 
-Обнаруживать jobs, Worker которых завершился без фиксации результата.
+Detect jobs whose Worker terminated without recording a result.
 
-### 167. Настроить lock duration
+### 167. Configure lock duration
 
-Соотнести lock renewal и максимальное время выполнения jobs.
+Align lock renewal with the maximum job execution time.
 
-### 168. Реализовать job timeout
+### 168. Implement job timeout
 
-Прерывать или помечать зависшие jobs с учётом необратимых side effects.
+Interrupt or mark hung jobs, taking irreversible side effects into account.
 
-### 169. Реализовать job cancellation
+### 169. Implement job cancellation
 
-Добавить cooperative cancellation через cancellation flag и AbortSignal.
+Add cooperative cancellation through a cancellation flag and AbortSignal.
 
-### 170. Реализовать job progress
+### 170. Implement job progress
 
-Сохранять прогресс длительных операций и предоставлять API его чтения.
+Store the progress of long-running operations and provide an API for reading it.
 
-### 171. Реализовать job result storage
+### 171. Implement job result storage
 
-Определить срок хранения результатов и ограничения размера result payload.
+Define the result retention period and result payload size limits.
 
-### 172. Реализовать parent-child flows
+### 172. Implement parent-child flows
 
-Использовать BullMQ FlowProducer для многошаговых зависимых background jobs.
+Use BullMQ FlowProducer for multi-step dependent background jobs.
 
-### 173. Обработать failure дочернего job
+### 173. Handle a child job failure
 
-Определить поведение parent job при частичном failure workflow.
+Define parent job behavior when the workflow partially fails.
 
-### 174. Реализовать sandboxed processors
+### 174. Implement sandboxed processors
 
-Вынести CPU-intensive job в отдельный process или Worker Thread.
+Move a CPU-intensive job to a separate process or Worker Thread.
 
-### 175. Настроить job cleanup
+### 175. Configure job cleanup
 
-Удалять завершённые и failed jobs по count или age policies.
+Delete completed and failed jobs according to count or age policies.
 
-### 176. Настроить Redis persistence
+### 176. Configure Redis persistence
 
-Сравнить RDB, AOF и комбинированный режим для job durability.
+Compare RDB, AOF, and combined mode for job durability.
 
-### 177. Исследовать Redis eviction policies
+### 177. Research Redis eviction policies
 
-Запретить опасное вытеснение queue metadata при достижении memory limit.
+Prohibit dangerous eviction of queue metadata when the memory limit is reached.
 
-### 178. Настроить Redis Sentinel
+### 178. Configure Redis Sentinel
 
-Проверить восстановление workers и producers после failover primary node.
+Verify recovery of workers and producers after primary node failover.
 
-### 179. Исследовать Redis Cluster
+### 179. Research Redis Cluster
 
-Проверить совместимость queue keys, hash slots и ограничения multi-key operations.
+Verify queue key compatibility, hash slots, and limitations of multi-key operations.
 
-### 180. Сравнить BullMQ, RabbitMQ и Kafka
+### 180. Compare BullMQ, RabbitMQ, and Kafka
 
-Создать decision matrix по scheduling, routing, replay, ordering, durability и operational complexity.
+Create a decision matrix for scheduling, routing, replay, ordering, durability, and operational complexity.
 
-## 8. Transactional Outbox и Inbox
+## 8. Transactional Outbox and Inbox
 
-### 181. Спроектировать outbox table
+### 181. Design the outbox table
 
-Добавить id, aggregateId, messageType, version, payload, headers, status, attempts и timestamps.
+Add id, aggregateId, messageType, version, payload, headers, status, attempts, and timestamps.
 
-### 182. Реализовать atomic business transaction
+### 182. Implement an atomic business transaction
 
-Сохранять domain state и outbox record в одной PostgreSQL transaction.
+Store domain state and the outbox record in one PostgreSQL transaction.
 
-### 183. Реализовать outbox repository
+### 183. Implement the outbox repository
 
-Добавить операции вставки, выборки, блокировки, подтверждения и фиксации ошибки публикации.
+Add operations for insertion, selection, locking, acknowledgement, and recording publication errors.
 
-### 184. Реализовать polling publisher
+### 184. Implement a polling publisher
 
-Периодически получать необработанные outbox records и публиковать их в broker.
+Periodically retrieve unprocessed outbox records and publish them to the broker.
 
-### 185. Использовать FOR UPDATE SKIP LOCKED
+### 185. Use FOR UPDATE SKIP LOCKED
 
-Позволить нескольким outbox workers безопасно обрабатывать разные records параллельно.
+Allow several outbox workers to safely process different records in parallel.
 
-### 186. Реализовать outbox batch publishing
+### 186. Implement outbox batch publishing
 
-Публиковать records пакетами с ограничением batch size и времени удержания transaction.
+Publish records in batches with limits on batch size and transaction holding time.
 
-### 187. Разделить publication и database transaction
+### 187. Separate publication and the database transaction
 
-Не удерживать открытую PostgreSQL transaction во время долгого сетевого вызова без обоснованной стратегии.
+Do not keep a PostgreSQL transaction open during a long network call without a justified strategy.
 
-### 188. Реализовать outbox claim model
+### 188. Implement an outbox claim model
 
-Вводить claimedAt и claimedBy для восстановления зависших records.
+Introduce claimedAt and claimedBy to recover stuck records.
 
-### 189. Реализовать publisher confirms для outbox
+### 189. Implement publisher confirms for the outbox
 
-Помечать RabbitMQ record опубликованным только после broker confirm.
+Mark a RabbitMQ record as published only after broker confirmation.
 
-### 190. Реализовать Kafka acknowledgement для outbox
+### 190. Implement Kafka acknowledgement for the outbox
 
-Помечать Kafka record опубликованным только после успешного producer acknowledgement.
+Mark a Kafka record as published only after successful producer acknowledgement.
 
-### 191. Обработать ambiguous publish result
+### 191. Handle an ambiguous publish result
 
-Считать возможным duplicate message, если producer не получил подтверждение, но broker мог сохранить запись.
+Consider a duplicate message possible if the producer did not receive confirmation but the broker may have stored the record.
 
-### 192. Реализовать outbox retry
+### 192. Implement outbox retry
 
-Повторять transient publication failures с backoff и максимальным числом попыток.
+Retry transient publication failures with backoff and a maximum number of attempts.
 
-### 193. Реализовать outbox dead state
+### 193. Implement an outbox dead state
 
-Перемещать неисправимые records в отдельное состояние для ручного анализа.
+Move irreparable records to a separate state for manual analysis.
 
-### 194. Реализовать outbox cleanup
+### 194. Implement outbox cleanup
 
-Архивировать или удалять успешно опубликованные records по retention policy.
+Archive or delete successfully published records according to the retention policy.
 
-### 195. Партиционировать outbox table
+### 195. Partition the outbox table
 
-Разделить крупную таблицу по времени и проверить влияние на cleanup и indexes.
+Partition a large table by time and verify the impact on cleanup and indexes.
 
-### 196. Добавить outbox indexes
+### 196. Add outbox indexes
 
-Оптимизировать выборку pending records и поиск по aggregateId и messageId.
+Optimize retrieval of pending records and lookup by aggregateId and messageId.
 
-### 197. Исследовать CDC-based outbox
+### 197. Research a CDC-based outbox
 
-Сравнить polling publisher с Debezium и PostgreSQL logical replication.
+Compare the polling publisher with Debezium and PostgreSQL logical replication.
 
-### 198. Реализовать inbox table
+### 198. Implement the inbox table
 
-Хранить messageId, consumer, receivedAt, processedAt и processing result.
+Store messageId, consumer, receivedAt, processedAt, and processing result.
 
-### 199. Реализовать atomic inbox processing
+### 199. Implement atomic inbox processing
 
-В одной transaction фиксировать inbox record и изменения business state.
+In one transaction, record the inbox entry and changes to business state.
 
-### 200. Реализовать duplicate detection
+### 200. Implement duplicate detection
 
-Пропускать сообщение, если соответствующая пара messageId и consumer уже обработана.
+Skip a message if the corresponding messageId and consumer pair has already been processed.
 
-### 201. Реализовать inbox retention
+### 201. Implement inbox retention
 
-Удалять deduplication records только после безопасного временного окна.
+Delete deduplication records only after a safe time window.
 
-### 202. Исследовать deduplication window
+### 202. Research the deduplication window
 
-Определить срок хранения inbox records на основе broker retention и replay policy.
+Define the inbox record retention period based on broker retention and replay policy.
 
-### 203. Реализовать inbox failure recovery
+### 203. Implement inbox failure recovery
 
-Различать сообщения, обработка которых не начиналась, выполняется или завершилась ошибкой.
+Distinguish messages whose processing has not started, is in progress, or ended with an error.
 
-### 204. Добавить outbox и inbox metrics
+### 204. Add outbox and inbox metrics
 
-Собирать pending count, publication latency, retry count, duplicate count и processing latency.
+Collect pending count, publication latency, retry count, duplicate count, and processing latency.
 
-### 205. Протестировать crash windows outbox/inbox
+### 205. Test outbox/inbox crash windows
 
-Проверить падение процесса до commit, после commit, до publish acknowledgement и после обработки consumer.
+Verify process failure before commit, after commit, before publish acknowledgement, and after consumer processing.
 
-## 9. Idempotency, retries и fault tolerance
+## 9. Idempotency, retries, and fault tolerance
 
-### 206. Реализовать HTTP idempotency keys
+### 206. Implement HTTP idempotency keys
 
-Сохранять результат повторяемых create-команд и возвращать его при повторном запросе с тем же ключом.
+Store the result of repeatable create commands and return it for a repeated request with the same key.
 
-### 207. Проверять idempotency payload fingerprint
+### 207. Verify the idempotency payload fingerprint
 
-Отклонять повторное использование ключа с другим request payload.
+Reject reuse of a key with a different request payload.
 
-### 208. Реализовать command idempotency
+### 208. Implement command idempotency
 
-Гарантировать, что повторная delivery команды не создаёт повторные business side effects.
+Guarantee that repeated delivery of a command does not create repeated business side effects.
 
-### 209. Реализовать event handler idempotency
+### 209. Implement event handler idempotency
 
-Защитить projection updates и downstream publications от duplicate events.
+Protect projection updates and downstream publications from duplicate events.
 
-### 210. Реализовать external API idempotency
+### 210. Implement external API idempotency
 
-Передавать idempotency key в Payment Provider и Notification Provider, если это поддерживается.
+Pass an idempotency key to the Payment Provider and Notification Provider if supported.
 
-### 211. Реализовать side-effect ledger
+### 211. Implement a side-effect ledger
 
-Сохранять факт выполнения необратимых внешних операций.
+Store the fact that irreversible external operations were performed.
 
-### 212. Разделить retryable и non-retryable errors
+### 212. Separate retryable and non-retryable errors
 
-Создать типизированную классификацию infrastructure, timeout, validation и business failures.
+Create a typed classification of infrastructure, timeout, validation, and business failures.
 
-### 213. Реализовать exponential backoff
+### 213. Implement exponential backoff
 
-Увеличивать задержку повторов без перегрузки недоступной зависимости.
+Increase retry delay without overloading an unavailable dependency.
 
-### 214. Добавить jitter
+### 214. Add jitter
 
-Предотвратить synchronized retry storm при восстановлении внешнего сервиса.
+Prevent a synchronized retry storm when an external service recovers.
 
-### 215. Реализовать retry budget
+### 215. Implement a retry budget
 
-Ограничить суммарное число повторов и время жизни операции.
+Limit the total number of retries and the operation lifetime.
 
-### 216. Реализовать timeout policy
+### 216. Implement a timeout policy
 
-Задать отдельные timeout для broker operations, database queries и external HTTP calls.
+Set separate timeouts for broker operations, database queries, and external HTTP calls.
 
-### 217. Передавать deadline
+### 217. Pass the deadline
 
-Останавливать downstream operations, если общий deadline workflow уже истёк.
+Stop downstream operations if the overall workflow deadline has already expired.
 
-### 218. Реализовать circuit breaker
+### 218. Implement a circuit breaker
 
-Прекращать обращения к временно неисправной зависимости и выполнять controlled recovery probes.
+Stop calls to a temporarily failing dependency and perform controlled recovery probes.
 
-### 219. Реализовать bulkhead isolation
+### 219. Implement bulkhead isolation
 
-Ограничить concurrency и ресурсы для независимых downstream systems.
+Limit concurrency and resources for independent downstream systems.
 
-### 220. Реализовать rate limiting producers
+### 220. Implement producer rate limiting
 
-Не позволять producer создавать нагрузку быстрее допустимой скорости обработки.
+Prevent a producer from generating load faster than the permitted processing rate.
 
-### 221. Реализовать consumer load shedding
+### 221. Implement consumer load shedding
 
-Откладывать или отклонять низкоприоритетную работу при критической загрузке.
+Defer or reject low-priority work under critical load.
 
-### 222. Реализовать retry storm protection
+### 222. Implement retry storm protection
 
-Ограничить одновременный возврат большого объёма сообщений из retry queues.
+Limit the simultaneous return of a large volume of messages from retry queues.
 
-### 223. Реализовать DLQ metadata
+### 223. Implement DLQ metadata
 
-Сохранять original destination, exception type, stack trace, attempts и failedAt.
+Store original destination, exception type, stack trace, attempts, and failedAt.
 
-### 224. Реализовать DLQ inspection API
+### 224. Implement a DLQ inspection API
 
-Предоставить фильтрацию dead-letter messages по сервису, типу, причине и времени.
+Provide filtering of dead-letter messages by service, type, cause, and time.
 
-### 225. Реализовать DLQ redrive
+### 225. Implement DLQ redrive
 
-Повторно отправлять выбранные сообщения в исходную queue или topic.
+Resend selected messages to the original queue or topic.
 
-### 226. Проверять schema перед redrive
+### 226. Validate the schema before redrive
 
-Не возвращать в основной поток сообщения с несовместимой или повреждённой схемой.
+Do not return messages with an incompatible or corrupted schema to the main flow.
 
-### 227. Реализовать selective redrive
+### 227. Implement selective redrive
 
-Повторно обрабатывать только сообщения, соответствующие заданному failure reason или business key.
+Reprocess only messages matching a specified failure reason or business key.
 
-### 228. Реализовать quarantine storage
+### 228. Implement quarantine storage
 
-Изолировать сообщения, требующие ручного исправления payload или business data.
+Isolate messages requiring manual correction of the payload or business data.
 
-### 229. Добавить redrive audit
+### 229. Add redrive audit
 
-Фиксировать кто, когда и почему повторно отправил сообщение.
+Record who resent the message, when, and why.
 
-### 230. Реализовать graceful degradation
+### 230. Implement graceful degradation
 
-Продолжать основную business operation при временной недоступности необязательных consumers, например Notification Service.
+Continue the main business operation during temporary unavailability of optional consumers, such as Notification Service.
 
-## 10. Saga и asynchronous workflows
+## 10. Saga and asynchronous workflows
 
-### 231. Выбрать saga scenario
+### 231. Select a saga scenario
 
-Использовать создание заказа с резервированием inventory, списанием payment и отправкой notification.
+Use order creation with inventory reservation, payment charging, and notification sending.
 
-### 232. Реализовать choreography saga
+### 232. Implement a choreography saga
 
-Связать сервисы через последовательность событий без центрального orchestrator.
+Connect services through a sequence of events without a central orchestrator.
 
-### 233. Документировать choreography dependencies
+### 233. Document choreography dependencies
 
-Зафиксировать скрытые связи между producers и consumers и риск циклических event chains.
+Establish hidden relationships between producers and consumers and the risk of cyclic event chains.
 
-### 234. Реализовать orchestration saga
+### 234. Implement an orchestration saga
 
-Создать Workflow Service, отправляющий commands и обрабатывающий результаты шагов.
+Create a Workflow Service that sends commands and processes step results.
 
-### 235. Создать saga state machine
+### 235. Create a saga state machine
 
-Определить состояния, transitions, terminal states и допустимые события.
+Define states, transitions, terminal states, and permitted events.
 
-### 236. Создать saga persistence model
+### 236. Create a saga persistence model
 
-Сохранять sagaId, state, version, step data, deadlines и timestamps.
+Store sagaId, state, version, step data, deadlines, and timestamps.
 
-### 237. Реализовать optimistic locking saga
+### 237. Implement optimistic locking for the saga
 
-Предотвратить конкурентную обработку нескольких событий одной saga.
+Prevent concurrent processing of multiple events belonging to one saga.
 
-### 238. Реализовать saga command dispatch
+### 238. Implement saga command dispatch
 
-Публиковать следующий command только после успешного изменения состояния saga.
+Publish the next command only after the saga state has been successfully changed.
 
-### 239. Использовать outbox в orchestrator
+### 239. Use an outbox in the orchestrator
 
-Атомарно сохранять новое состояние saga и команду следующего шага.
+Atomically store the new saga state and the command for the next step.
 
-### 240. Реализовать compensating transaction Inventory
+### 240. Implement an Inventory compensating transaction
 
-Освобождать reservation при отказе оплаты или отмене заказа.
+Release the reservation when payment fails or the order is cancelled.
 
-### 241. Реализовать compensating transaction Payment
+### 241. Implement a Payment compensating transaction
 
-Возвращать средства, если workflow не может завершиться после успешной оплаты.
+Refund funds if the workflow cannot complete after successful payment.
 
-### 242. Сделать compensation идемпотентной
+### 242. Make compensation idempotent
 
-Безопасно выполнять повторное ReleaseInventory и RefundPayment.
+Safely execute repeated ReleaseInventory and RefundPayment operations.
 
-### 243. Реализовать saga timeout
+### 243. Implement a saga timeout
 
-Переводить зависшую saga в compensation или manual-review состояние.
+Move a stuck saga into compensation or manual-review state.
 
-### 244. Реализовать scheduled timeout checker
+### 244. Implement a scheduled timeout checker
 
-Использовать Redis queue или отдельный scheduler для поиска просроченных saga.
+Use a Redis queue or a separate scheduler to find expired sagas.
 
-### 245. Обрабатывать late events
+### 245. Handle late events
 
-Игнорировать, компенсировать или отдельно фиксировать события, пришедшие после timeout.
+Ignore, compensate for, or separately record events received after timeout.
 
-### 246. Обрабатывать out-of-order events
+### 246. Handle out-of-order events
 
-Проверять допустимость transition и временно откладывать события, пришедшие раньше ожидаемого шага.
+Validate the transition and temporarily defer events received before the expected step.
 
-### 247. Реализовать saga retry policy
+### 247. Implement a saga retry policy
 
-Настроить отдельные retry rules для каждого шага workflow.
+Configure separate retry rules for each workflow step.
 
-### 248. Реализовать saga cancellation
+### 248. Implement saga cancellation
 
-Позволить пользователю отменить workflow до достижения необратимого шага.
+Allow the user to cancel the workflow before reaching an irreversible step.
 
-### 249. Реализовать manual intervention
+### 249. Implement manual intervention
 
-Добавить состояние, в котором operator должен принять решение о продолжении или компенсации.
+Add a state in which an operator must decide whether to continue or compensate.
 
-### 250. Реализовать saga audit trail
+### 250. Implement a saga audit trail
 
-Сохранять полную историю transitions, commands, events, retries и compensations.
+Store the complete history of transitions, commands, events, retries, and compensations.
 
-### 251. Реализовать saga versioning
+### 251. Implement saga versioning
 
-Поддержать изменение workflow definition для уже запущенных saga instances.
+Support changes to the workflow definition for already-running saga instances.
 
-### 252. Реализовать migration saga state
+### 252. Implement saga state migration
 
-Преобразовывать persisted state старой версии orchestration.
+Convert persisted state from an older orchestration version.
 
-### 253. Реализовать parallel saga steps
+### 253. Implement parallel saga steps
 
-Одновременно выполнять независимые действия и ожидать их объединённого результата.
+Execute independent actions simultaneously and wait for their combined result.
 
-### 254. Реализовать join semantics
+### 254. Implement join semantics
 
-Определить поведение при полном успехе, частичном успехе и failure параллельных шагов.
+Define behavior for complete success, partial success, and failure of parallel steps.
 
-### 255. Реализовать long-running workflow
+### 255. Implement a long-running workflow
 
-Создать workflow, который может выполняться часы или дни и восстанавливаться после рестарта.
+Create a workflow that can run for hours or days and recover after a restart.
 
-### 256. Реализовать human-in-the-loop step
+### 256. Implement a human-in-the-loop step
 
-Приостанавливать workflow до внешнего подтверждения пользователя или operator.
+Pause the workflow until external confirmation from a user or operator.
 
-### 257. Реализовать workflow query API
+### 257. Implement a workflow query API
 
-Возвращать текущее состояние, завершённые шаги, pending actions и failure reason.
+Return the current state, completed steps, pending actions, and failure reason.
 
-### 258. Реализовать workflow resume
+### 258. Implement workflow resume
 
-Продолжать выполнение после исправления данных или восстановления зависимости.
+Continue execution after data is corrected or a dependency is restored.
 
-### 259. Сравнить custom orchestrator с Temporal
+### 259. Compare a custom orchestrator with Temporal
 
-Исследовать durable execution, retries, timers, state recovery и operational complexity Temporal.
+Research Temporal durable execution, retries, timers, state recovery, and operational complexity.
 
-### 260. Сравнить custom orchestrator с Camunda
+### 260. Compare a custom orchestrator with Camunda
 
-Исследовать BPMN, external tasks, human workflows и границы применения process engine.
+Research BPMN, external tasks, human workflows, and the boundaries of process engine use.
 
-## 11. Read models, projections и reconciliation
+## 11. Read models, projections, and reconciliation
 
-### 261. Создать asynchronous read model
+### 261. Create an asynchronous read model
 
-Собирать агрегированное состояние заказа из событий нескольких сервисов.
+Build an aggregated order state from events of several services.
 
-### 262. Реализовать projection consumer
+### 262. Implement a projection consumer
 
-Обновлять PostgreSQL read model через идемпотентную обработку событий.
+Update the PostgreSQL read model through idempotent event processing.
 
-### 263. Хранить projection offset
+### 263. Store the projection offset
 
-Фиксировать позицию consumer для восстановления и контроля consistency.
+Record the consumer position for recovery and consistency control.
 
-### 264. Реализовать projection rebuild
+### 264. Implement projection rebuild
 
-Полностью перестраивать read model из Kafka event history.
+Fully rebuild the read model from Kafka event history.
 
-### 265. Реализовать blue-green projection rebuild
+### 265. Implement blue-green projection rebuild
 
-Строить новую версию projection параллельно и переключать чтение после завершения.
+Build a new projection version in parallel and switch reads after completion.
 
-### 266. Добавить projection version
+### 266. Add a projection version
 
-Поддержать несколько реализаций read model для одной event stream.
+Support several read-model implementations for one event stream.
 
-### 267. Измерять consistency lag
+### 267. Measure consistency lag
 
-Вычислять задержку между occurredAt события и обновлением projection.
+Calculate the delay between event occurredAt and projection update.
 
-### 268. Реализовать stale-data indicator
+### 268. Implement a stale-data indicator
 
-Показывать клиенту возраст или актуальность eventual-consistent read model.
+Show the client the age or freshness of the eventual-consistent read model.
 
-### 269. Реализовать reconciliation job
+### 269. Implement a reconciliation job
 
-Периодически сравнивать Order, Inventory, Payment и Saga state.
+Periodically compare Order, Inventory, Payment, and Saga state.
 
-### 270. Создать consistency invariants
+### 270. Create consistency invariants
 
-Формализовать условия вроде «COMPLETED order должен иметь confirmed inventory и succeeded payment».
+Formalize conditions such as “a COMPLETED order must have confirmed inventory and succeeded payment.”
 
-### 271. Реализовать inconsistency detection
+### 271. Implement inconsistency detection
 
-Находить нарушения invariants и сохранять их в отдельную таблицу.
+Find invariant violations and store them in a separate table.
 
-### 272. Реализовать automated repair
+### 272. Implement automated repair
 
-Безопасно исправлять известные типы расхождений через идемпотентные commands.
+Safely correct known discrepancy types through idempotent commands.
 
-### 273. Реализовать manual repair workflow
+### 273. Implement a manual repair workflow
 
-Создать operator flow для неоднозначных consistency conflicts.
+Create an operator flow for ambiguous consistency conflicts.
 
-### 274. Добавить anti-entropy process
+### 274. Add an anti-entropy process
 
-Периодически синхронизировать состояние между source services и derived read models.
+Periodically synchronize state between source services and derived read models.
 
-### 275. Документировать consistency windows
+### 275. Document consistency windows
 
-Определить допустимое время рассогласования для каждого пользовательского сценария.
+Define the permitted inconsistency period for each user scenario.
 
 ## 12. Testing
 
-### 276. Создать unit tests domain state machines
+### 276. Create unit tests for domain state machines
 
-Проверить допустимые и запрещённые transitions Order, Payment и Saga.
+Verify permitted and prohibited Order, Payment, and Saga transitions.
 
-### 277. Создать unit tests message validation
+### 277. Create unit tests for message validation
 
-Проверить envelope, payload schemas, versions и обязательные metadata.
+Verify envelope, payload schemas, versions, and required metadata.
 
-### 278. Создать unit tests routing logic
+### 278. Create unit tests for routing logic
 
-Проверить RabbitMQ routing keys, Kafka partition keys и queue names.
+Verify RabbitMQ routing keys, Kafka partition keys, and queue names.
 
-### 279. Создать unit tests retry policies
+### 279. Create unit tests for retry policies
 
-Проверить backoff, jitter, retry classification и retry budget.
+Verify backoff, jitter, retry classification, and retry budget.
 
-### 280. Создать unit tests idempotency
+### 280. Create unit tests for idempotency
 
-Проверить повторную обработку одинакового command, event и job.
+Verify repeated processing of the same command, event, and job.
 
-### 281. Создать unit tests outbox publisher
+### 281. Create unit tests for the outbox publisher
 
-Проверить claim, publish, confirm, retry и dead-state transitions.
+Verify claim, publish, confirm, retry, and dead-state transitions.
 
-### 282. Создать unit tests saga orchestrator
+### 282. Create unit tests for the saga orchestrator
 
-Проверить success, failure, timeout, compensation и cancellation paths.
+Verify success, failure, timeout, compensation, and cancellation paths.
 
-### 283. Создать contract tests
+### 283. Create contract tests
 
-Проверить совместимость producers и consumers без запуска полной системы.
+Verify producer and consumer compatibility without launching the complete system.
 
-### 284. Создать consumer-driven contract tests
+### 284. Create consumer-driven contract tests
 
-Позволить consumers фиксировать ожидаемую форму events и commands.
+Allow consumers to define the expected shape of events and commands.
 
-### 285. Настроить Testcontainers PostgreSQL
+### 285. Configure Testcontainers PostgreSQL
 
-Запускать integration tests на реальной версии PostgreSQL.
+Run integration tests against a real PostgreSQL version.
 
-### 286. Настроить Testcontainers RabbitMQ
+### 286. Configure Testcontainers RabbitMQ
 
-Проверять exchanges, queues, acknowledgements, retries и DLQ на реальном broker.
+Verify exchanges, queues, acknowledgements, retries, and DLQ on a real broker.
 
-### 287. Настроить Testcontainers Kafka
+### 287. Configure Testcontainers Kafka
 
-Проверять partitions, offsets, consumer groups и replay на реальном broker.
+Verify partitions, offsets, consumer groups, and replay on a real broker.
 
-### 288. Настроить Testcontainers Redis
+### 288. Configure Testcontainers Redis
 
-Проверять BullMQ jobs, retries, delays и stalled recovery.
+Verify BullMQ jobs, retries, delays, and stalled recovery.
 
-### 289. Создать RabbitMQ integration tests
+### 289. Create RabbitMQ integration tests
 
-Проверить publish-confirm-consume-ack workflow.
+Verify the publish-confirm-consume-ack workflow.
 
-### 290. Создать Kafka integration tests
+### 290. Create Kafka integration tests
 
-Проверить producer-consumer-offset workflow и consumer group rebalancing.
+Verify the producer-consumer-offset workflow and consumer group rebalancing.
 
-### 291. Создать BullMQ integration tests
+### 291. Create BullMQ integration tests
 
-Проверить delayed jobs, attempts, custom backoff и job deduplication.
+Verify delayed jobs, attempts, custom backoff, and job deduplication.
 
-### 292. Протестировать duplicate delivery
+### 292. Test duplicate delivery
 
-Доставлять одно сообщение несколько раз и проверять отсутствие повторных side effects.
+Deliver one message several times and verify the absence of repeated side effects.
 
-### 293. Протестировать out-of-order delivery
+### 293. Test out-of-order delivery
 
-Изменять порядок событий и проверять state transition protection.
+Change the event order and verify state transition protection.
 
-### 294. Протестировать malformed messages
+### 294. Test malformed messages
 
-Отправлять некорректный JSON, неизвестную версию и invalid payload.
+Send invalid JSON, an unknown version, and an invalid payload.
 
-### 295. Протестировать poison messages
+### 295. Test poison messages
 
-Проверить ограниченное число retries и последующий переход в DLQ.
+Verify a limited number of retries and the subsequent move to the DLQ.
 
-### 296. Протестировать consumer crash до commit
+### 296. Test consumer crash before commit
 
-Завершать процесс после business operation, но до acknowledgement или offset commit.
+Terminate the process after the business operation but before acknowledgement or offset commit.
 
-### 297. Протестировать consumer crash после commit
+### 297. Test consumer crash after commit
 
-Проверить отсутствие повреждения state при падении сразу после фиксации обработки.
+Verify that state is not corrupted when failure occurs immediately after processing is recorded.
 
-### 298. Протестировать producer crash
+### 298. Test producer crash
 
-Завершать outbox publisher на разных этапах публикации и подтверждения.
+Terminate the outbox publisher at different stages of publication and confirmation.
 
-### 299. Протестировать broker restart
+### 299. Test broker restart
 
-Перезапускать RabbitMQ, Kafka и Redis во время активной нагрузки.
+Restart RabbitMQ, Kafka, and Redis under active load.
 
-### 300. Протестировать PostgreSQL outage
+### 300. Test PostgreSQL outage
 
-Проверить остановку acknowledgements, pause consumers и восстановление после возврата базы.
+Verify acknowledgement suspension, consumer pause, and recovery after the database returns.
 
-### 301. Протестировать network latency
+### 301. Test network latency
 
-Добавить задержку и packet loss между сервисами и brokers.
+Add delay and packet loss between services and brokers.
 
-### 302. Протестировать network partition
+### 302. Test network partition
 
-Изолировать producer или consumer от broker и проверить recovery behavior.
+Isolate a producer or consumer from the broker and verify recovery behavior.
 
-### 303. Протестировать RabbitMQ node failure
+### 303. Test RabbitMQ node failure
 
-Остановить node quorum-кластера и проверить availability и data safety.
+Stop a quorum-cluster node and verify availability and data safety.
 
-### 304. Протестировать Kafka broker failure
+### 304. Test Kafka broker failure
 
-Остановить leader partition и проверить election, producer retries и consumer recovery.
+Stop the partition leader and verify election, producer retries, and consumer recovery.
 
-### 305. Протестировать Redis failover
+### 305. Test Redis failover
 
-Переключить Sentinel primary во время обработки jobs.
+Switch the Sentinel primary during job processing.
 
-### 306. Создать end-to-end happy path
+### 306. Create an end-to-end happy path
 
-Проверить полное прохождение заказа через все services, brokers и read model.
+Verify the complete order flow through all services, brokers, and the read model.
 
-### 307. Создать end-to-end payment failure path
+### 307. Create an end-to-end payment failure path
 
-Проверить compensation Inventory и итоговое состояние заказа.
+Verify Inventory compensation and the final order state.
 
-### 308. Создать end-to-end timeout path
+### 308. Create an end-to-end timeout path
 
-Проверить saga timeout, retries, compensation и audit trail.
+Verify saga timeout, retries, compensation, and audit trail.
 
-### 309. Создать end-to-end duplicate path
+### 309. Create an end-to-end duplicate path
 
-Повторно отправить commands и events и проверить effectively-once результат.
+Resend commands and events and verify the effectively-once result.
 
-### 310. Создать deterministic test fixtures
+### 310. Create deterministic test fixtures
 
-Использовать фиксированные clock, IDs, message timestamps и broker payloads.
+Use fixed clock, IDs, message timestamps, and broker payloads.
 
-## 13. Performance и capacity planning
+## 13. Performance and capacity planning
 
-### 311. Определить performance targets
+### 311. Define performance targets
 
-Зафиксировать target throughput, p95/p99 latency, queue lag и допустимую длительность workflow.
+Establish target throughput, p95/p99 latency, queue lag, and permitted workflow duration.
 
-### 312. Создать RabbitMQ load test
+### 312. Create a RabbitMQ load test
 
-Измерить publish rate, consume rate, unacked count и queue growth.
+Measure publish rate, consume rate, unacked count, and queue growth.
 
-### 313. Создать Kafka load test
+### 313. Create a Kafka load test
 
-Измерить throughput по partitions, producer latency, consumer lag и rebalance impact.
+Measure throughput by partition, producer latency, consumer lag, and rebalance impact.
 
-### 314. Создать BullMQ load test
+### 314. Create a BullMQ load test
 
-Измерить job throughput, Redis memory usage и stalled-job rate.
+Measure job throughput, Redis memory usage, and stalled-job rate.
 
-### 315. Сравнить serialization formats
+### 315. Compare serialization formats
 
-Измерить размер payload и CPU cost JSON, Avro и Protobuf.
+Measure payload size and CPU cost of JSON, Avro, and Protobuf.
 
-### 316. Исследовать message batching
+### 316. Research message batching
 
-Сравнить одиночную и пакетную публикацию и обработку.
+Compare single and batch publication and processing.
 
-### 317. Исследовать payload size impact
+### 317. Research payload size impact
 
-Измерить влияние крупных сообщений на broker memory, network и consumer latency.
+Measure the impact of large messages on broker memory, network, and consumer latency.
 
-### 318. Реализовать payload offloading
+### 318. Implement payload offloading
 
-Сохранять крупные данные в object storage или database и передавать reference.
+Store large data in object storage or a database and pass a reference.
 
-### 319. Настроить consumer concurrency benchmark
+### 319. Configure a consumer concurrency benchmark
 
-Найти оптимальное число consumers для каждого типа workload.
+Find the optimal number of consumers for each workload type.
 
-### 320. Настроить prefetch benchmark
+### 320. Configure a prefetch benchmark
 
-Измерить RabbitMQ throughput и fairness при разных prefetch values.
+Measure RabbitMQ throughput and fairness with different prefetch values.
 
-### 321. Настроить Kafka partition benchmark
+### 321. Configure a Kafka partition benchmark
 
-Определить необходимое количество partitions для целевого parallelism.
+Determine the required number of partitions for target parallelism.
 
-### 322. Измерить outbox publication latency
+### 322. Measure outbox publication latency
 
-Определить задержку от commit business transaction до публикации события.
+Determine the delay from business transaction commit to event publication.
 
-### 323. Измерить end-to-end event latency
+### 323. Measure end-to-end event latency
 
-Измерить время от producer operation до завершения всех обязательных consumers.
+Measure the time from the producer operation to completion by all required consumers.
 
-### 324. Провести soak test
+### 324. Conduct a soak test
 
-Запустить длительную нагрузку для обнаружения memory leaks, connection leaks и backlog growth.
+Run a prolonged load to detect memory leaks, connection leaks, and backlog growth.
 
-### 325. Создать capacity model
+### 325. Create a capacity model
 
-Рассчитать необходимое количество brokers, partitions, queues, consumers и database resources.
+Calculate the required number of brokers, partitions, queues, consumers, and database resources.
 
 ## 14. Observability
 
-### 326. Реализовать structured logging
+### 326. Implement structured logging
 
-Использовать JSON logs с service, environment, messageId, correlationId, causationId и traceId.
+Use JSON logs with service, environment, messageId, correlationId, causationId, and traceId.
 
-### 327. Добавить logging context propagation
+### 327. Add logging context propagation
 
-Автоматически переносить metadata между HTTP, RabbitMQ, Kafka и BullMQ handlers.
+Automatically transfer metadata between HTTP, RabbitMQ, Kafka, and BullMQ handlers.
 
-### 328. Санитизировать logs
+### 328. Sanitize logs
 
-Удалять credentials, payment data, tokens и чувствительные payload fields.
+Remove credentials, payment data, tokens, and sensitive payload fields.
 
-### 329. Реализовать OpenTelemetry instrumentation
+### 329. Implement OpenTelemetry instrumentation
 
-Настроить traces, metrics и context propagation для всей платформы.
+Configure traces, metrics, and context propagation for the entire platform.
 
-### 330. Добавить HTTP tracing
+### 330. Add HTTP tracing
 
-Создавать server и client spans для synchronous API calls.
+Create server and client spans for synchronous API calls.
 
-### 331. Добавить RabbitMQ tracing
+### 331. Add RabbitMQ tracing
 
-Создавать producer и consumer spans с exchange, queue и routing key attributes.
+Create producer and consumer spans with exchange, queue, and routing key attributes.
 
-### 332. Добавить Kafka tracing
+### 332. Add Kafka tracing
 
-Создавать spans с topic, partition, offset и consumer group attributes.
+Create spans with topic, partition, offset, and consumer group attributes.
 
-### 333. Добавить BullMQ tracing
+### 333. Add BullMQ tracing
 
-Создавать spans для enqueue, waiting time и job processing.
+Create spans for enqueue, waiting time, and job processing.
 
-### 334. Связать traces через message headers
+### 334. Link traces through message headers
 
-Продолжать trace между независимыми процессами и отложенными retries.
+Continue the trace between independent processes and delayed retries.
 
-### 335. Добавить producer metrics
+### 335. Add producer metrics
 
-Собирать published, failed, retried, confirmed и unroutable message counters.
+Collect published, failed, retried, confirmed, and unroutable message counters.
 
-### 336. Добавить consumer metrics
+### 336. Add consumer metrics
 
-Собирать received, processed, failed, retried и duplicate message counters.
+Collect received, processed, failed, retried, and duplicate message counters.
 
-### 337. Добавить processing histograms
+### 337. Add processing histograms
 
-Измерять duration handlers, jobs, saga steps и external API calls.
+Measure the duration of handlers, jobs, saga steps, and external API calls.
 
-### 338. Добавить queue depth metrics
+### 338. Add queue depth metrics
 
-Собирать ready, unacked, delayed, active и failed counts.
+Collect ready, unacked, delayed, active, and failed counts.
 
-### 339. Добавить Kafka lag metrics
+### 339. Add Kafka lag metrics
 
-Собирать lag по topic, partition и consumer group.
+Collect lag by topic, partition, and consumer group.
 
-### 340. Добавить outbox metrics
+### 340. Add outbox metrics
 
-Собирать pending count, oldest pending age, publication latency и dead records.
+Collect pending count, oldest pending age, publication latency, and dead records.
 
-### 341. Добавить saga metrics
+### 341. Add saga metrics
 
-Собирать active, completed, failed, compensating и timed-out saga counts.
+Collect active, completed, failed, compensating, and timed-out saga counts.
 
-### 342. Добавить consistency metrics
+### 342. Add consistency metrics
 
-Собирать projection lag и число обнаруженных reconciliation conflicts.
+Collect projection lag and the number of detected reconciliation conflicts.
 
-### 343. Создать Grafana dashboard RabbitMQ
+### 343. Create a RabbitMQ Grafana dashboard
 
-Показать queue depth, publish rate, consume rate, unacked и consumer count.
+Show queue depth, publish rate, consume rate, unacked, and consumer count.
 
-### 344. Создать Grafana dashboard Kafka
+### 344. Create a Kafka Grafana dashboard
 
-Показать producer rate, consumer rate, partition lag и rebalance events.
+Show producer rate, consumer rate, partition lag, and rebalance events.
 
-### 345. Создать Grafana dashboard BullMQ
+### 345. Create a BullMQ Grafana dashboard
 
-Показать waiting, active, delayed, failed, stalled и completed jobs.
+Show waiting, active, delayed, failed, stalled, and completed jobs.
 
-### 346. Создать Grafana dashboard workflows
+### 346. Create a workflows Grafana dashboard
 
-Показать saga duration, success rate, compensation rate и timeout rate.
+Show saga duration, success rate, compensation rate, and timeout rate.
 
-### 347. Создать distributed trace examples
+### 347. Create distributed trace examples
 
-Документировать trace полного заказа через HTTP, brokers, services и background jobs.
+Document the trace of a complete order through HTTP, brokers, services, and background jobs.
 
-### 348. Добавить correlation search
+### 348. Add correlation search
 
-Обеспечить поиск всех logs и traces одного distributed workflow по correlationId.
+Provide search for all logs and traces of one distributed workflow by correlationId.
 
-### 349. Реализовать alerting rules
+### 349. Implement alerting rules
 
-Настроить alerts на backlog growth, consumer lag, DLQ growth, outbox age и saga timeouts.
+Configure alerts for backlog growth, consumer lag, DLQ growth, outbox age, and saga timeouts.
 
-### 350. Определить SLI и SLO
+### 350. Define SLI and SLO
 
-Зафиксировать availability, processing latency, successful workflow rate и event freshness.
+Establish availability, processing latency, successful workflow rate, and event freshness.
 
 ## 15. Security
 
-### 351. Реализовать authentication между сервисами
+### 351. Implement authentication between services
 
-Использовать service identity вместо доверия к произвольным broker connections.
+Use service identity instead of trusting arbitrary broker connections.
 
-### 352. Реализовать authorization publishers
+### 352. Implement publisher authorization
 
-Ограничить, какие сервисы могут публиковать в конкретные exchanges и topics.
+Limit which services can publish to specific exchanges and topics.
 
-### 353. Реализовать authorization consumers
+### 353. Implement consumer authorization
 
-Ограничить чтение queues, topics и consumer groups по принципу least privilege.
+Limit reading of queues, topics, and consumer groups according to the principle of least privilege.
 
-### 354. Настроить RabbitMQ users и vhosts
+### 354. Configure RabbitMQ users and vhosts
 
-Разделить environments и сервисные credentials.
+Separate environments and service credentials.
 
-### 355. Настроить RabbitMQ TLS
+### 355. Configure RabbitMQ TLS
 
-Шифровать соединения producers, consumers и management API.
+Encrypt producer, consumer, and Management API connections.
 
-### 356. Настроить Kafka SASL
+### 356. Configure Kafka SASL
 
-Использовать подходящий механизм authentication для clients.
+Use an appropriate authentication mechanism for clients.
 
-### 357. Настроить Kafka ACL
+### 357. Configure Kafka ACL
 
-Ограничить доступ к topics, groups и transactional IDs.
+Limit access to topics, groups, and transactional IDs.
 
-### 358. Настроить Kafka TLS
+### 358. Configure Kafka TLS
 
-Шифровать broker и client traffic.
+Encrypt broker and client traffic.
 
-### 359. Настроить Redis ACL
+### 359. Configure Redis ACL
 
-Создать отдельного пользователя с минимальными командами и key patterns.
+Create a separate user with minimal commands and key patterns.
 
-### 360. Настроить Redis TLS
+### 360. Configure Redis TLS
 
-Защитить connections background job infrastructure.
+Protect background job infrastructure connections.
 
-### 361. Реализовать secrets management
+### 361. Implement secrets management
 
-Не хранить broker credentials и TLS keys в репозитории или Docker images.
+Do not store broker credentials and TLS keys in the repository or Docker images.
 
-### 362. Реализовать payload validation security
+### 362. Implement payload validation security
 
-Отклонять неизвестные поля, опасные типы и некорректные enum values.
+Reject unknown fields, dangerous types, and invalid enum values.
 
-### 363. Ограничить message size
+### 363. Limit message size
 
-Защитить consumers и brokers от memory exhaustion через oversized payload.
+Protect consumers and brokers from memory exhaustion through oversized payloads.
 
-### 364. Реализовать safe deserialization
+### 364. Implement safe deserialization
 
-Не использовать unsafe object reconstruction и dynamic code execution.
+Do not use unsafe object reconstruction or dynamic code execution.
 
-### 365. Добавить event authenticity
+### 365. Add event authenticity
 
-Исследовать HMAC signing или broker-level trust для событий из внешних источников.
+Research HMAC signing or broker-level trust for events from external sources.
 
-### 366. Реализовать replay attack protection
+### 366. Implement replay attack protection
 
-Проверять messageId, timestamps и допустимое временное окно для внешних commands.
+Validate messageId, timestamps, and the permitted time window for external commands.
 
-### 367. Защитить tenant isolation
+### 367. Protect tenant isolation
 
-Проверять tenant scope в application layer, а не доверять только message metadata.
+Validate tenant scope in the application layer instead of trusting only message metadata.
 
-### 368. Минимизировать PII в events
+### 368. Minimize PII in events
 
-Публиковать identifiers и references вместо копирования чувствительных данных.
+Publish identifiers and references instead of copying sensitive data.
 
-### 369. Реализовать encryption для чувствительных payload
+### 369. Implement encryption for sensitive payloads
 
-Исследовать field-level encryption и управление ключами.
+Research field-level encryption and key management.
 
-### 370. Добавить security audit log
+### 370. Add a security audit log
 
-Фиксировать административный redrive, replay, cancellation и manual saga actions.
+Record administrative redrive, replay, cancellation, and manual saga actions.
 
-## 16. Deployment и эксплуатация
+## 16. Deployment and operations
 
-### 371. Создать production Dockerfiles
+### 371. Create production Dockerfiles
 
-Использовать multi-stage build, non-root user и минимальный runtime image.
+Use a multi-stage build, non-root user, and minimal runtime image.
 
-### 372. Добавить container health checks
+### 372. Add container health checks
 
-Проверять состояние приложения без выполнения тяжёлых broker operations.
+Check application state without performing heavy broker operations.
 
-### 373. Настроить resource limits
+### 373. Configure resource limits
 
-Ограничить CPU и memory для services, consumers и workers.
+Limit CPU and memory for services, consumers, and workers.
 
-### 374. Настроить graceful deployment
+### 374. Configure graceful deployment
 
-Останавливать приём новых сообщений и завершать активную обработку перед shutdown.
+Stop accepting new messages and finish active processing before shutdown.
 
-### 375. Реализовать consumer draining
+### 375. Implement consumer draining
 
-Дождаться завершения in-flight handlers перед удалением instance.
+Wait for in-flight handlers to finish before removing an instance.
 
-### 376. Настроить rolling updates
+### 376. Configure rolling updates
 
-Обновлять consumers без потери сообщений и массовых rebalances.
+Update consumers without message loss and mass rebalances.
 
-### 377. Реализовать blue-green consumers
+### 377. Implement blue-green consumers
 
-Запускать новую версию consumer параллельно с контролируемым переключением.
+Launch a new consumer version in parallel with controlled switching.
 
-### 378. Реализовать canary consumer
+### 378. Implement a canary consumer
 
-Обрабатывать ограниченную долю сообщений новой версией handler.
+Process a limited share of messages with the new handler version.
 
-### 379. Реализовать feature flags
+### 379. Implement feature flags
 
-Включать новые routing, consumers и workflow steps без полного redeploy.
+Enable new routing, consumers, and workflow steps without a complete redeploy.
 
-### 380. Подготовить broker topology migrations
+### 380. Prepare broker topology migrations
 
-Безопасно изменять queues, exchanges, bindings, topics и partitions.
+Safely change queues, exchanges, bindings, topics, and partitions.
 
-### 381. Реализовать zero-downtime event evolution
+### 381. Implement zero-downtime event evolution
 
-Сначала обновлять consumers для поддержки новой версии, затем producers.
+First update consumers to support the new version, then producers.
 
-### 382. Реализовать dual publishing
+### 382. Implement dual publishing
 
-Временно публиковать старую и новую версии события во время миграции.
+Temporarily publish old and new event versions during migration.
 
-### 383. Реализовать shadow consumption
+### 383. Implement shadow consumption
 
-Обрабатывать события новой версией без изменения production state.
+Process events with the new version without changing production state.
 
-### 384. Настроить consumer autoscaling
+### 384. Configure consumer autoscaling
 
-Масштабировать consumers по queue depth, message rate и Kafka lag.
+Scale consumers by queue depth, message rate, and Kafka lag.
 
-### 385. Ограничить autoscaling
+### 385. Limit autoscaling
 
-Предотвратить перегрузку PostgreSQL и downstream services при резком увеличении consumers.
+Prevent PostgreSQL and downstream services from being overloaded by a sharp increase in consumers.
 
-### 386. Создать backup strategy RabbitMQ
+### 386. Create a RabbitMQ backup strategy
 
-Определить восстановление definitions, policies и критичных durable messages.
+Define recovery of definitions, policies, and critical durable messages.
 
-### 387. Создать backup strategy Kafka
+### 387. Create a Kafka backup strategy
 
-Определить восстановление topic configuration, metadata и replicated data.
+Define recovery of topic configuration, metadata, and replicated data.
 
-### 388. Создать backup strategy Redis
+### 388. Create a Redis backup strategy
 
-Настроить сохранение и восстановление queue state.
+Configure storage and recovery of queue state.
 
-### 389. Создать backup strategy PostgreSQL
+### 389. Create a PostgreSQL backup strategy
 
-Обеспечить point-in-time recovery для business state, outbox, inbox и saga tables.
+Provide point-in-time recovery for business state, outbox, inbox, and saga tables.
 
-### 390. Провести disaster recovery test
+### 390. Conduct a disaster recovery test
 
-Восстановить платформу из backups и проверить consistency между компонентами.
+Restore the platform from backups and verify consistency between components.
 
 ## 17. Operational tooling
 
-### 391. Создать platform CLI
+### 391. Create a platform CLI
 
-Объединить административные команды для brokers, outbox, saga, DLQ и replay.
+Combine administrative commands for brokers, outbox, saga, DLQ, and replay.
 
-### 392. Реализовать CLI просмотра outbox
+### 392. Implement an outbox viewing CLI
 
-Показывать pending, failed и oldest records с фильтрацией.
+Show pending, failed, and oldest records with filtering.
 
-### 393. Реализовать CLI повторной публикации outbox
+### 393. Implement an outbox republishing CLI
 
-Безопасно переиздавать выбранные records с audit metadata.
+Safely republish selected records with audit metadata.
 
-### 394. Реализовать CLI просмотра DLQ
+### 394. Implement a DLQ viewing CLI
 
-Получать failure metadata и исходный payload без автоматического удаления.
+Retrieve failure metadata and the original payload without automatic deletion.
 
-### 395. Реализовать CLI redrive DLQ
+### 395. Implement a DLQ redrive CLI
 
-Повторно отправлять сообщения с dry-run и подтверждением.
+Resend messages with dry-run and confirmation.
 
-### 396. Реализовать CLI Kafka offsets
+### 396. Implement a Kafka offsets CLI
 
-Показывать current offset, end offset и lag по consumer groups.
+Show current offset, end offset, and lag by consumer group.
 
-### 397. Реализовать CLI Kafka replay
+### 397. Implement a Kafka replay CLI
 
-Создавать временную consumer group или сбрасывать offsets с защитными проверками.
+Create a temporary consumer group or reset offsets with safety checks.
 
-### 398. Реализовать CLI RabbitMQ topology
+### 398. Implement a RabbitMQ topology CLI
 
-Проверять наличие и параметры exchanges, queues, bindings и policies.
+Verify the presence and parameters of exchanges, queues, bindings, and policies.
 
-### 399. Реализовать CLI saga inspection
+### 399. Implement a saga inspection CLI
 
-Показывать state, history, pending step, retries и compensation status.
+Show state, history, pending step, retries, and compensation status.
 
-### 400. Реализовать CLI saga recovery
+### 400. Implement a saga recovery CLI
 
-Возобновлять, отменять или переводить saga в manual-review состояние.
+Resume, cancel, or move a saga into manual-review state.
 
-### 401. Добавить dry-run mode
+### 401. Add dry-run mode
 
-Показывать последствия replay, redrive и repair без изменения production state.
+Show the consequences of replay, redrive, and repair without changing production state.
 
-### 402. Добавить operator authorization
+### 402. Add operator authorization
 
-Ограничить опасные административные операции по ролям.
+Restrict dangerous administrative operations by role.
 
-### 403. Добавить operator audit trail
+### 403. Add an operator audit trail
 
-Сохранять команды, параметры, пользователя, время и результат каждой операции.
+Store the commands, parameters, user, time, and result of each operation.
 
-### 404. Создать operational admin API
+### 404. Create an operational admin API
 
-Предоставить защищённый HTTP API для dashboard и automation scripts.
+Provide a protected HTTP API for dashboards and automation scripts.
 
-### 405. Создать read-only operations dashboard
+### 405. Create a read-only operations dashboard
 
-Показать состояние brokers, queues, topics, outbox, DLQ и active workflows.
+Show the state of brokers, queues, topics, outbox, DLQ, and active workflows.
 
-## 18. Runbooks и incident response
+## 18. Runbooks and incident response
 
-### 406. Создать runbook роста RabbitMQ queue
+### 406. Create a RabbitMQ queue growth runbook
 
-Описать диагностику producer rate, consumer count, unacked messages и downstream latency.
+Describe diagnostics for producer rate, consumer count, unacked messages, and downstream latency.
 
-### 407. Создать runbook Kafka consumer lag
+### 407. Create a Kafka consumer lag runbook
 
-Описать проверку partitions, rebalances, slow handlers и database bottlenecks.
+Describe checks for partitions, rebalances, slow handlers, and database bottlenecks.
 
-### 408. Создать runbook BullMQ backlog
+### 408. Create a BullMQ backlog runbook
 
-Описать диагностику workers, stalled jobs, Redis memory и rate limits.
+Describe diagnostics for workers, stalled jobs, Redis memory, and rate limits.
 
-### 409. Создать runbook роста DLQ
+### 409. Create a DLQ growth runbook
 
-Описать классификацию failures, исправление причины и безопасный redrive.
+Describe failure classification, correction of the cause, and safe redrive.
 
-### 410. Создать runbook зависшего outbox
+### 410. Create a stuck outbox runbook
 
-Описать проверку polling workers, locks, broker availability и failed records.
+Describe checks for polling workers, locks, broker availability, and failed records.
 
-### 411. Создать runbook saga timeout
+### 411. Create a saga timeout runbook
 
-Описать анализ истории, downstream state и выбор resume или compensation.
+Describe analysis of history, downstream state, and the choice between resume and compensation.
 
-### 412. Создать runbook duplicate side effect
+### 412. Create a duplicate side effect runbook
 
-Описать поиск idempotency failure и восстановление business consistency.
+Describe finding an idempotency failure and restoring business consistency.
 
-### 413. Создать runbook event schema incident
+### 413. Create an event schema incident runbook
 
-Описать остановку несовместимого producer, rollback и recovery consumers.
+Describe stopping an incompatible producer, rollback, and consumer recovery.
 
-### 414. Создать runbook broker outage
+### 414. Create a broker outage runbook
 
-Описать graceful degradation, backlog control и восстановление после возврата broker.
+Describe graceful degradation, backlog control, and recovery after the broker returns.
 
-### 415. Создать runbook database outage
+### 415. Create a database outage runbook
 
-Описать pause consumers, отказ acknowledgements и безопасное возобновление обработки.
+Describe pausing consumers, withholding acknowledgements, and safely resuming processing.
 
-### 416. Создать runbook Redis failover
+### 416. Create a Redis failover runbook
 
-Описать проверку Sentinel, stalled jobs и повторную обработку.
+Describe verification of Sentinel, stalled jobs, and reprocessing.
 
-### 417. Создать runbook excessive retries
+### 417. Create an excessive retries runbook
 
-Описать остановку retry storm и временную изоляцию проблемной зависимости.
+Describe stopping a retry storm and temporarily isolating the problematic dependency.
 
-### 418. Создать incident severity model
+### 418. Create an incident severity model
 
-Классифицировать события по влиянию на delivery, consistency и пользовательские операции.
+Classify incidents by impact on delivery, consistency, and user operations.
 
-### 419. Создать incident timeline template
+### 419. Create an incident timeline template
 
-Фиксировать начало, обнаружение, mitigation, recovery и corrective actions.
+Record the start, detection, mitigation, recovery, and corrective actions.
 
-### 420. Провести game day
+### 420. Conduct a game day
 
-Сымитировать отказ broker, рост backlog, DLQ incident и recovery по подготовленным runbooks.
+Simulate a broker failure, backlog growth, a DLQ incident, and recovery using the prepared runbooks.
 
-## 19. Документация и architecture governance
+## 19. Documentation and architecture governance
 
-### 421. Создать README репозитория
+### 421. Create the repository README
 
-Описать назначение платформы, компоненты, инфраструктуру и основной демонстрационный workflow.
+Describe the platform purpose, components, infrastructure, and primary demonstration workflow.
 
-### 422. Создать quick start
+### 422. Create a quick start
 
-Документировать запуск infrastructure, migrations, services и тестового сценария.
+Document launching infrastructure, migrations, services, and the test scenario.
 
-### 423. Создать architecture overview
+### 423. Create an architecture overview
 
-Описать service boundaries, transports, databases и направления сообщений.
+Describe service boundaries, transports, databases, and message directions.
 
-### 424. Создать C4 System Context diagram
+### 424. Create a C4 System Context diagram
 
-Показать пользователей, внешние providers и платформу как систему.
+Show users, external providers, and the platform as a system.
 
-### 425. Создать C4 Container diagram
+### 425. Create a C4 Container diagram
 
-Показать backend services, brokers, databases, workers и observability stack.
+Show backend services, brokers, databases, workers, and the observability stack.
 
-### 426. Создать component diagrams
+### 426. Create component diagrams
 
-Показать application, domain, ports, adapters и handlers внутри ключевых сервисов.
+Show application, domain, ports, adapters, and handlers inside key services.
 
-### 427. Создать sequence diagram happy path
+### 427. Create a happy-path sequence diagram
 
-Показать прохождение Order workflow через commands, events и saga.
+Show the Order workflow through commands, events, and saga.
 
-### 428. Создать sequence diagram failure path
+### 428. Create a failure-path sequence diagram
 
-Показать payment failure, retries, compensation и итоговые события.
+Show payment failure, retries, compensation, and final events.
 
-### 429. Создать sequence diagram outbox
+### 429. Create an outbox sequence diagram
 
-Показать transaction, outbox polling, broker acknowledgement и consumer inbox.
+Show the transaction, outbox polling, broker acknowledgement, and consumer inbox.
 
-### 430. Создать sequence diagram DLQ redrive
+### 430. Create a DLQ redrive sequence diagram
 
-Показать failure, dead-lettering, operator action и повторную обработку.
+Show failure, dead-lettering, operator action, and reprocessing.
 
-### 431. Документировать RabbitMQ topology
+### 431. Document RabbitMQ topology
 
-Описать exchanges, queues, bindings, retry queues и DLQ.
+Describe exchanges, queues, bindings, retry queues, and DLQ.
 
-### 432. Документировать Kafka topology
+### 432. Document Kafka topology
 
-Описать topics, partitions, keys, consumer groups, retention и compaction.
+Describe topics, partitions, keys, consumer groups, retention, and compaction.
 
-### 433. Документировать Redis queues
+### 433. Document Redis queues
 
-Описать jobs, workers, schedules, retries, deduplication и retention.
+Describe jobs, workers, schedules, retries, deduplication, and retention.
 
-### 434. Документировать event contracts
+### 434. Document event contracts
 
-Для каждого события указать producer, consumers, schema, version и ordering key.
+For each event, specify the producer, consumers, schema, version, and ordering key.
 
-### 435. Документировать delivery guarantees
+### 435. Document delivery guarantees
 
-Указать фактические гарантии для RabbitMQ, Kafka, BullMQ, outbox и consumers.
+Specify the actual guarantees for RabbitMQ, Kafka, BullMQ, outbox, and consumers.
 
-### 436. Документировать failure matrix
+### 436. Document the failure matrix
 
-Для каждого шага перечислить возможный failure, retry, timeout, DLQ и compensation.
+For each step, list the possible failure, retry, timeout, DLQ, and compensation.
 
-### 437. Документировать consistency model
+### 437. Document the consistency model
 
-Зафиксировать source of truth, projections, reconciliation и допустимые consistency windows.
+Establish the source of truth, projections, reconciliation, and permitted consistency windows.
 
-### 438. Создать ADR выбора RabbitMQ
+### 438. Create an ADR for choosing RabbitMQ
 
-Обосновать сценарии, для которых используется routing-oriented message broker.
+Justify the scenarios for which a routing-oriented message broker is used.
 
-### 439. Создать ADR выбора Kafka
+### 439. Create an ADR for choosing Kafka
 
-Обосновать сценарии event streaming, replay и long-term retention.
+Justify event streaming, replay, and long-term retention scenarios.
 
-### 440. Создать ADR выбора Redis queues
+### 440. Create an ADR for choosing Redis queues
 
-Обосновать scheduling и background job use cases.
+Justify scheduling and background job use cases.
 
-### 441. Создать ADR transactional outbox
+### 441. Create a transactional outbox ADR
 
-Зафиксировать причины отказа от dual write между PostgreSQL и broker.
+Establish the reasons for rejecting dual write between PostgreSQL and the broker.
 
-### 442. Создать ADR saga strategy
+### 442. Create a saga strategy ADR
 
-Сравнить choreography и orchestration для основного workflow.
+Compare choreography and orchestration for the primary workflow.
 
-### 443. Создать ADR idempotency storage
+### 443. Create an idempotency storage ADR
 
-Обосновать PostgreSQL, Redis или комбинированное хранение deduplication records.
+Justify PostgreSQL, Redis, or combined storage of deduplication records.
 
-### 444. Создать ADR schema format
+### 444. Create a schema format ADR
 
-Обосновать выбор JSON, Avro или Protobuf.
+Justify the choice of JSON, Avro, or Protobuf.
 
-### 445. Создать architecture invariants
+### 445. Create architecture invariants
 
-Зафиксировать обязательные правила: no shared database, atomic outbox, idempotent consumers и versioned contracts.
+Establish mandatory rules: no shared database, atomic outbox, idempotent consumers, and versioned contracts.
 
-## 20. Итоговые production-style сценарии
+## 20. Final production-style scenarios
 
-### 446. Реализовать полный Order workflow через RabbitMQ
+### 446. Implement the complete Order workflow through RabbitMQ
 
-Использовать RabbitMQ commands и events, outbox, inbox, retries, DLQ и saga orchestration.
+Use RabbitMQ commands and events, outbox, inbox, retries, DLQ, and saga orchestration.
 
-### 447. Реализовать event streaming через Kafka
+### 447. Implement event streaming through Kafka
 
-Публиковать историю Order lifecycle для analytics, projections и replay.
+Publish Order lifecycle history for analytics, projections, and replay.
 
-### 448. Реализовать background jobs через BullMQ
+### 448. Implement background jobs through BullMQ
 
-Использовать Redis queue для notifications, reconciliation, cleanup и scheduled timeout checks.
+Use a Redis queue for notifications, reconciliation, cleanup, and scheduled timeout checks.
 
-### 449. Реализовать одновременную публикацию в RabbitMQ и Kafka
+### 449. Implement simultaneous publication to RabbitMQ and Kafka
 
-Разделить operational commands и durable event stream без нарушения atomicity.
+Separate operational commands and the durable event stream without violating atomicity.
 
-### 450. Реализовать broker adapter switching
+### 450. Implement broker adapter switching
 
-Позволить application layer публиковать сообщения через ports без зависимости от конкретного SDK.
+Allow the application layer to publish messages through ports without depending on a specific SDK.
 
-### 451. Реализовать end-to-end distributed tracing
+### 451. Implement end-to-end distributed tracing
 
-Показать единый trace от HTTP create order до notification job.
+Show a single trace from HTTP create order to the notification job.
 
-### 452. Реализовать controlled failure scenario
+### 452. Implement a controlled failure scenario
 
-Искусственно вызвать отказ Payment Service и показать retries, timeout и compensation.
+Artificially cause a Payment Service failure and show retries, timeout, and compensation.
 
-### 453. Реализовать duplicate delivery scenario
+### 453. Implement a duplicate delivery scenario
 
-Повторно доставить command и event и доказать отсутствие повторного списания и резервирования.
+Redeliver a command and event and prove the absence of repeated charging and reservation.
 
-### 454. Реализовать out-of-order scenario
+### 454. Implement an out-of-order scenario
 
-Изменить порядок событий и показать защиту state machine и saga.
+Change the event order and show state-machine and saga protection.
 
-### 455. Реализовать broker outage scenario
+### 455. Implement a broker outage scenario
 
-Остановить broker, продолжить локальные transactions через outbox и восстановить публикацию после запуска.
+Stop the broker, continue local transactions through the outbox, and restore publication after startup.
 
-### 456. Реализовать consumer outage scenario
+### 456. Implement a consumer outage scenario
 
-Остановить consumer, накопить backlog и восстановить обработку без потери сообщений.
+Stop the consumer, accumulate a backlog, and restore processing without message loss.
 
-### 457. Реализовать DLQ recovery scenario
+### 457. Implement a DLQ recovery scenario
 
-Исправить broken handler и безопасно выполнить selective redrive.
+Fix the broken handler and safely perform selective redrive.
 
-### 458. Реализовать event replay scenario
+### 458. Implement an event replay scenario
 
-Перестроить read model из Kafka topic без изменения source services.
+Rebuild the read model from a Kafka topic without changing source services.
 
-### 459. Реализовать reconciliation scenario
+### 459. Implement a reconciliation scenario
 
-Обнаружить искусственно созданную inconsistency и выполнить automated repair.
+Detect an artificially created inconsistency and perform automated repair.
 
-### 460. Реализовать saga manual recovery scenario
+### 460. Implement a saga manual recovery scenario
 
-Перевести зависший workflow в manual-review и продолжить после operator action.
+Move a stuck workflow into manual-review and continue after operator action.
 
-### 461. Провести full load test
+### 461. Conduct a full load test
 
-Проверить платформу под целевой нагрузкой с RabbitMQ, Kafka, Redis и PostgreSQL одновременно.
+Test the platform under target load with RabbitMQ, Kafka, Redis, and PostgreSQL simultaneously.
 
-### 462. Провести full chaos test
+### 462. Conduct a full chaos test
 
-Комбинировать broker restart, service crash, network latency и duplicate delivery.
+Combine broker restart, service crash, network latency, and duplicate delivery.
 
-### 463. Проверить recovery point
+### 463. Verify the recovery point
 
-Подтвердить, что после crash или restart каждое business operation имеет определённое итоговое состояние.
+Confirm that after a crash or restart, every business operation has a defined final state.
 
-### 464. Проверить отсутствие lost messages
+### 464. Verify the absence of lost messages
 
-Сопоставить business records, outbox, broker records, inbox и final projections.
+Reconcile business records, outbox, broker records, inbox, and final projections.
 
-### 465. Проверить отсутствие uncontrolled duplicates
+### 465. Verify the absence of uncontrolled duplicates
 
-Убедиться, что повторные deliveries не создают повторных необратимых side effects.
+Ensure that repeated deliveries do not create repeated irreversible side effects.
 
-### 466. Проверить bounded backlog
+### 466. Verify a bounded backlog
 
-Подтвердить работу rate limits, backpressure, autoscaling и load shedding.
+Confirm operation of rate limits, backpressure, autoscaling, and load shedding.
 
-### 467. Проверить observability coverage
+### 467. Verify observability coverage
 
-Для каждого failure scenario убедиться в наличии logs, metrics, traces и alerts.
+For each failure scenario, ensure the presence of logs, metrics, traces, and alerts.
 
-### 468. Проверить security boundaries
+### 468. Verify security boundaries
 
-Проверить, что сервис не может читать или публиковать сообщения вне разрешённого scope.
+Verify that a service cannot read or publish messages outside the permitted scope.
 
-### 469. Провести architecture review
+### 469. Conduct an architecture review
 
-Проверить boundaries, dependency rules, contracts, failure handling и operational readiness.
+Verify boundaries, dependency rules, contracts, failure handling, and operational readiness.
 
-### 470. Подготовить production readiness checklist
+### 470. Prepare a production readiness checklist
 
-Зафиксировать обязательные проверки конфигурации, reliability, security, monitoring, backups, runbooks и recovery procedures.
+Establish mandatory checks for configuration, reliability, security, monitoring, backups, runbooks, and recovery procedures.
